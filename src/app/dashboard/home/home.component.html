@@ -1,0 +1,18 @@
+<section class="container">
+  <app-header></app-header>
+    <div class="card">
+      <p-megamenu [model]="items" />
+  </div>
+
+  <div class="contenedor">
+    <div class="mb-4">
+      @for(product of products; track product.reference_id) {
+        <div class="relative mx-auto">
+          <img [src]="product.image" alt="logo" class="w-100 h-50 rounded" />
+          <p-tag class="absolute" styleClass="dark:!bg-surface-900" [style]="{ 'left.px': 5, 'top.px': 5 }" />
+      </div>
+      }
+      
+  </div>
+  </div>
+</section>
