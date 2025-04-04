@@ -4,15 +4,27 @@
       <p-megamenu [model]="items" />
   </div>
 
-  <div class="contenedor">
-    <div class="mb-4">
-      @for(product of products; track product.reference_id) {
-        <div class="relative mx-auto">
-          <img [src]="product.image" alt="logo" class="w-100 h-50 rounded" />
-          <p-tag class="absolute" styleClass="dark:!bg-surface-900" [style]="{ 'left.px': 5, 'top.px': 5 }" />
+<div class="contenedor">
+  @for(product of products; track product.reference_id) {
+    <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
+      <div class="mb-4">
+          <div class="relative mx-auto">
+              <img [src]="product.image" [alt]="product.name" class="product-image" />
+              <p-tag [value]="product.name"  class="absolute" styleClass="dark:!bg-surface-900" [style]="{ 'left.px': 5, 'top.px': 5 }" />
+          </div>
       </div>
-      }
-      
+      <div class="mb-4 font-medium">{{ product.name }}</div>
+      <div class="flex justify-between items-center">
+          <div style="font-weight: bold;">{{ '$' + product.price }}</div>
+          <span>
+              <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
+          </span>
+      </div>
   </div>
-  </div>
+  } 
+</div>
 </section>
+<div class="card flex justify-center">
+  <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="limit" [totalRecords]="totalRecords"
+          [rowsPerPageOptions]="[4, 8, 12]" />
+</div>

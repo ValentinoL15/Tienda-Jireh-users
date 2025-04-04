@@ -8,14 +8,18 @@ import { Product } from '../../interfaces/interfaces';
 })
 export class ProductsService {
 
-  API_URL = 'http://localhost:4000/api/jireh'
+  API_URL = 'http://localhost:4000/api/userJireh'
 
   private http = inject(HttpClient)
 
 /***********************************************PRODUCTS****************************************************/ 
 
-getAllProducts():Observable<Product[]>{
-  return this.http.get<Product[]>(`${this.API_URL}/get_products`)
+getAllProducts(skip: number = 0, limit: number = 3,):Observable<Product[]>{
+  const params: any = {
+    skip: skip.toString(),
+    limit: limit.toString(),
+  }
+  return this.http.get<Product[]>(`${this.API_URL}/get_products`, { params })
 }
 
 }
