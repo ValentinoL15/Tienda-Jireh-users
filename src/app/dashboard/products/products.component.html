@@ -1,0 +1,18 @@
+<div class="gallery-container">
+  @if (products.length > 0) {
+    <div class="gallery-flex">
+      @for (product of products; track product._id) {
+        <div class="gallery-card">
+          <img [src]="product.image" alt="Zapatilla" />
+          <div class="product-info">
+            <p>{{ product.name }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <p class="no-products">No hay productos disponibles.</p>
+  }
+</div>
+
+

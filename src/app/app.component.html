@@ -1,1 +1,34 @@
+<div class="container">
+  <app-header></app-header>
+  <div class="buttons">
+    <button mat-button [routerLink]="['']"> Home</button>
+    @for (brand of urls.brands; track brand) {
+      <button mat-button [matMenuTriggerFor]="menu">
+        {{brand}}
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item 
+                [routerLink]="['/products', formatBrandForUrl(brand), 'Hombre']">
+          Hombres
+        </button>
+        <button mat-menu-item 
+                [routerLink]="['/products', formatBrandForUrl(brand), 'Mujer']">
+          Mujeres
+        </button>
+        <button mat-menu-item 
+                [routerLink]="['/products', formatBrandForUrl(brand), 'Niños']">
+          Niños
+        </button>
+        <button mat-menu-item 
+                [routerLink]="['/products', formatBrandForUrl(brand), 'Niñas']">
+          Niñas
+        </button>
+        <button mat-menu-item 
+                [routerLink]="['/products', formatBrandForUrl(brand), 'Unisex']">
+          Unisex
+        </button>
+      </mat-menu>
+    }
+  </div>
+
 <router-outlet></router-outlet>

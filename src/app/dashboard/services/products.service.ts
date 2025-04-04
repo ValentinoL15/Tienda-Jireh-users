@@ -22,4 +22,8 @@ getAllProducts(skip: number = 0, limit: number = 3,):Observable<Product[]>{
   return this.http.get<Product[]>(`${this.API_URL}/get_products`, { params })
 }
 
+getProductsByGender(brand:any, gender:any):Observable<Product[]>{
+  return this.http.get<Product[]>(`${this.API_URL}/get_products_by_gender/${brand}/${gender}`)
+}
+
 }

@@ -1,0 +1,46 @@
+.card {
+  padding: 10px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.buttons {
+  width: 100%; 
+  flex-wrap: wrap; 
+  display: flex; 
+  justify-content: center; 
+  gap: 50px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+@media (max-width: 1367px) {
+  .buttons {
+    justify-content: center; // ✅ Centra los botones cuando se envuelven
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap:30px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .buttons {
+    justify-content: center; // ✅ Centra los botones cuando se envuelven
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap:0px;
+  }
+}
+
+@media (max-width: 600px) { // 📱 Ajuste para pantallas pequeñas
+  .buttons {
+    justify-content: center; // ✅ Centra los botones cuando se envuelven
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    gap:0px;
+  }
+}
