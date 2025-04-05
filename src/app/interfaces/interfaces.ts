@@ -11,7 +11,7 @@ export interface Product {
   type: string[],
   brand: string[],
   image: string,
-  shoes: [SpecificShoe]
+  shoes: SpecificShoe[]
 }
 
 

@@ -26,4 +26,7 @@ getProductsByGender(brand:any, gender:any):Observable<Product[]>{
   return this.http.get<Product[]>(`${this.API_URL}/get_products_by_gender/${brand}/${gender}`)
 }
 
+getProductById(id: string): Observable<Product[]> {
+  return this.http.get<Product[]>(`${this.API_URL}/get_product/${id}`);
+}
 }

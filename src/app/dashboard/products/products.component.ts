@@ -4,10 +4,11 @@ import { ProductsService } from '../services/products.service';
 import { Product } from '../../interfaces/interfaces';
 import { MessageService } from 'primeng/api';
 import { switchMap } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-products',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,7 +44,6 @@ export class ProductsComponent implements OnInit {
         });
       }
     });
-
   }
 
   getProductsGender(){

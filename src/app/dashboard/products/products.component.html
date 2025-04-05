@@ -2,7 +2,7 @@
   @if (products.length > 0) {
     <div class="gallery-flex">
       @for (product of products; track product._id) {
-        <div class="gallery-card">
+        <div class="gallery-card" [routerLink]="['/products', brand, gender, product._id]" routerLinkActive="router-link-active" >
           <img [src]="product.image" alt="Zapatilla" />
           <div class="product-info">
             <p>{{ product.name }}</p>
