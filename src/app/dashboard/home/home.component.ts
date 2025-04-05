@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { Tag } from 'primeng/tag';
 import { Product } from '../../interfaces/interfaces';
 import { ProductsService } from '../services/products.service';
-import { MessageService } from 'primeng/api';
+
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -13,14 +14,13 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MessageService]
 })
 export class HomeComponent implements OnInit{
   private cd = inject(ChangeDetectorRef)
   private productServ = inject(ProductsService)
-  private messageServ = inject(MessageService)
+  private toastr = inject(ToastrService)
   items: any[] | undefined;
-  products!: Product[]
+  products: Product[] = []
   totalRecords: number = 0;
   skip: number = 0;
   limit: number = 12;
@@ -28,21 +28,19 @@ export class HomeComponent implements OnInit{
 
   ngOnInit(): void {
   this.getAllProducts()
-  this.cd.detectChanges()
-}
+  
+  }
 
 getAllProducts(skip: number = 0, limit: number = this.limit) {
-  const queryParams: any = {
-    skip: skip.toString(),
-    limit: limit.toString()}
   this.productServ.getAllProducts(skip, limit).subscribe({
     next: (res: any) => {
+      console.log('✅ Productos recibidos:', res);
       this.products = [...res.products]; // Clonar array para forzar detección de cambios
       this.totalRecords = res.total ?? 0;
       this.cd.detectChanges(); // Forzar actualización del DOM
     },
     error: (err: any) => {
-      this.messageServ.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error desconocido' });
+      this.toastr.error(err.error.message)
     }
   });
 }

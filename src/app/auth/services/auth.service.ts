@@ -12,17 +12,15 @@ export class AuthService {
   API_URL = 'http://localhost:4000/api/userJireh'
   private tokenKey = 'st_1892@121';
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   private http = inject(HttpClient)
   private router = inject(Router)
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  
 
 /***********************************************LOGIN****************************************************/ 
 
 getToken(): string | null {
-  if (isPlatformBrowser(this.platformId)) {
-    return localStorage.getItem(this.tokenKey);
-  }
-  return null;
+  return localStorage.getItem(this.tokenKey); // ✅ usa la misma clave con la que se guarda
 }
 
 setToken(token: string): void {
@@ -50,6 +48,6 @@ logOut(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.clear();
   }
-  this.router.navigate(['/login']);
+  this.router.navigate(['/dashboard']);
 }
 }

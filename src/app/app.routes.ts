@@ -14,7 +14,7 @@ export const routes: Routes = [
     path: 'products/:brand/:gender/:id', component: SpecificProductComponent
   },
   {
-    path: '', component: HomeComponent, pathMatch: 'full'
+    path: '', redirectTo: '/dashboard', pathMatch: 'full'
   },
  
 ];
