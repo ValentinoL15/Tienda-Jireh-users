@@ -1,24 +1,69 @@
 <div class="nav-bar">
   <div class="content-bar">
     <img src="img/logo.png" alt="" width="150px" height="80px">
-      <p (click)="showDialog()" label="Show">Login <i class="pi pi-user" style="font-size: 2.5rem"></i></p>
+    
+    @if(authState === 'loading') {
+      <!-- Mostrar un placeholder mientras carga -->
+      <div class="auth-placeholder"></div>
+    }
+    @else if(authState === 'authenticated') {
+      <div>
+        <button 
+          pButton 
+          icon="pi pi-user" 
+          label="Mi cuenta" 
+          (click)="menu.toggle($event)"
+        ></button>
+        
+        <p-overlayPanel #menu [dismissable]="true">
+          <div class="flex flex-col gap-2 p-3 w-48">
+            <button pButton 
+              class="p-button-text p-button-plain" 
+              icon="pi pi-home" 
+              label="Dashboard"
+              [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
+              (click)="menu.hide()"
+            ></button>
+            
+            <button pButton 
+              class="p-button-text p-button-plain" 
+              icon="pi pi-cog" 
+              label="Profile"
+              [routerLink]="['/profile']" routerLinkActive="router-link-active" 
+              (click)="menu.hide()"
+            ></button>
+            
+            <button pButton 
+              class="p-button-text p-button-plain" 
+              icon="pi pi-sign-out" 
+              label="Logout"
+              (click)="logout()">
+            </button>
+          </div>
+        </p-overlayPanel>
+      </div>
+    }
+    @else {
+      <p (click)="showDialog()" label="Show">
+        Login <i class="pi pi-user" style="font-size: 2.5rem"></i>
+      </p>
+    }
   </div>
-
 </div>
+
 <p-dialog header="Iniciar sesión" [(visible)]="visible" [style]="{ width: '25rem' }">
   <form [formGroup]="form" (ngSubmit)="login()">
     <div class="flex items-center gap-4 mb-8">
       <label for="username" class="font-semibold w-24">Email</label>
       <input pInputText id="username" class="flex-auto" autocomplete="off" formControlName="email"/>
-  </div>
-  <div class="flex items-center gap-4 mb-8">
+    </div>
+    <div class="flex items-center gap-4 mb-8">
       <label for="email" class="font-semibold w-24">Contraseña</label>
       <input pInputText id="email" class="flex-auto" autocomplete="off" formControlName="password"/>
-  </div>
-  <div class="flex justify-end gap-2">
+    </div>
+    <div class="flex justify-end gap-2">
       <p-button label="Cancel" severity="secondary" (click)="visible = false" />
       <p-button type="submit" label="Iniciar Sesión" />
-  </div>
+    </div>
   </form>
-  
 </p-dialog>
