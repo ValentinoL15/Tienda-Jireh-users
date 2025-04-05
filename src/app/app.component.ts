@@ -5,11 +5,12 @@ import { ButtonModule } from 'primeng/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { MyComponent } from "../../spinner.component";
 
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, ButtonModule,RouterOutlet,MatMenuModule,MatButtonModule,RouterLink,MatIconModule],
+  imports: [HeaderComponent, ButtonModule, RouterOutlet, MatMenuModule, MatButtonModule, RouterLink, MatIconModule, MyComponent],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

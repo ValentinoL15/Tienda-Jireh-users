@@ -4,13 +4,17 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { routes } from './app.routes';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './auth.interceptor';
+import { SpinnerInterceptor } from './spinner.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideExperimentalZonelessChangeDetection(),
-    provideRouter(routes, withComponentInputBinding()), provideHttpClient(withFetch()),
+    provideRouter(routes, withComponentInputBinding()), provideHttpClient(withFetch(), withInterceptors([authInterceptor,SpinnerInterceptor])),
     provideClientHydration(withEventReplay()),
+    provideAnimations(),
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

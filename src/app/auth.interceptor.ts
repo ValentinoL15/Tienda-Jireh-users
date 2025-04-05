@@ -22,7 +22,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     catchError((error) => {
       if (error.status === 401) {
-        // Redirigir a la página de login
         router.navigate(['/dashboard']);
       }
       return throwError(() => error);
