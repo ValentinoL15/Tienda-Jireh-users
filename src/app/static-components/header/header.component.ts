@@ -85,6 +85,12 @@ export class HeaderComponent implements OnInit{
     }
   }
 
+  goRegister(){
+    this.router.navigate(['/register'])
+    this.visible = false
+    this.cd.detectChanges()
+  }
+
   login(){
     const formulario = {
       email: this.form.value.email,

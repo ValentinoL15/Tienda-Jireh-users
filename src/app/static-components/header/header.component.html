@@ -9,11 +9,11 @@
     @else if(authState === 'authenticated') {
       <div>
         <button 
-          pButton 
+          class="login-button"
           icon="pi pi-user" 
           label="Mi cuenta" 
           (click)="menu.toggle($event)"
-        ></button>
+        >Mi cuenta</button>
         
         <p-overlayPanel #menu [dismissable]="true">
           <div class="flex flex-col gap-2 p-3 w-48">
@@ -44,9 +44,11 @@
       </div>
     }
     @else {
-      <p (click)="showDialog()" label="Show">
-        Login <i class="pi pi-user" style="font-size: 2.5rem"></i>
-      </p>
+      <button class="login-button" (click)="showDialog()">
+        <i class="pi pi-user"></i>
+        <span>Login</span>
+        <div class="hover-effect"></div>
+      </button>
     }
   </div>
 </div>
@@ -62,8 +64,12 @@
       <input pInputText id="email" class="flex-auto" autocomplete="off" formControlName="password"/>
     </div>
     <div class="flex justify-end gap-2">
-      <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-      <p-button type="submit" label="Iniciar Sesión" />
+      <button class="cancel-button" (click)="visible = false" >Cancelar</button>
+      <button class="login-button" type="submit" label="Iniciar Sesión" >Iniciar sesión</button>
     </div>
+    <div style="margin-top: 20px;">
+      <p (click)="goRegister()" >¿No tienes una cuenta? <span class="registro" style="font-weight: bold;">Registrate</span></p>
+    </div>
+    
   </form>
 </p-dialog>

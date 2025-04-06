@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../../interfaces/interfaces';
 import { MessageService } from 'primeng/api';
 import { CarouselModule } from 'primeng/carousel';
@@ -24,6 +24,7 @@ export class SpecificProductComponent implements OnInit{
   private route = inject(ActivatedRoute)
   private messageServ = inject(MessageService)
   private cd = inject(ChangeDetectorRef)
+  private router = inject(Router)
 
   //VARIABLES
   brand: string = '';
@@ -54,6 +55,10 @@ export class SpecificProductComponent implements OnInit{
         sales: 0,
         image: "",
       }]
+  }
+
+  volver(){
+    this.router.navigate([`/products/${this.brand}/${this.gender}`])
   }
 
   ngOnInit(): void {
