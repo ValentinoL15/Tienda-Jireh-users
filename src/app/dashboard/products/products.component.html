@@ -4,6 +4,10 @@
 </div>
 
 <div class="gallery-container">
+  <p style="font-size: 2rem; font-weight: bold;">{{brand.toLocaleUpperCase()}}</p>
+</div>
+
+<div class="gallery-container">
   @if (products.length > 0) {
     <div class="gallery-flex">
       @for (product of products; track product._id) {

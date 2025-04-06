@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { Tag } from 'primeng/tag';
 import { Product } from '../../interfaces/interfaces';
 import { ProductsService } from '../services/products.service';
-
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ToastrService } from 'ngx-toastr';
@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
-  imports: [Tag, ButtonModule, PaginatorModule],
+  imports: [Tag, ButtonModule, PaginatorModule,RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
