@@ -8,7 +8,8 @@ import { Product } from '../../interfaces/interfaces';
 })
 export class ProductsService {
 
-  API_URL = 'http://localhost:4000/api/userJireh'
+  API_URL = 'https://tienda-jireh-service-production.up.railway.app/api/userJireh'
+  //API_URL = 'http://localhost:4000/api/userJireh'
 
   private http = inject(HttpClient)
 
