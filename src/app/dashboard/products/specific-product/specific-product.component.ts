@@ -215,7 +215,7 @@ pagarAhora() {
         amount: res.amount,
         country: res.country,
         lang: 'es',
-        external: false,
+        external: true,
         response: res.response,
         confirmation: res.confirmation
       };
