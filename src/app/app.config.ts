@@ -13,7 +13,7 @@ import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideExperimentalZonelessChangeDetection(),
-    provideRouter(routes, withComponentInputBinding()), provideHttpClient(withFetch(), withInterceptors([SpinnerInterceptor,authInterceptor])),
+    provideRouter(routes, withComponentInputBinding()), provideHttpClient(withFetch(), withInterceptors([SpinnerInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimations(),
     provideToastr(),
