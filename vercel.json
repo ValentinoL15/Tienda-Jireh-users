@@ -1,5 +1,23 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist/tienda-jireh-users/browser/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dist/tienda-jireh-users/server/server.mjs",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/server",
+      "dest": "/dist/tienda-jireh-users/server/server.mjs"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
   ]
 }
