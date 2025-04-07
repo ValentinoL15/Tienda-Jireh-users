@@ -42,6 +42,7 @@
             <div class="variant-actions">
               <strong style="font-weight: bold;">{{product.price | currency:"USD"}}</strong>
               <p-button 
+                (click)="agregarAlCarrito(shoe)"
                 icon="pi pi-shopping-cart" 
                 [disabled]="shoe.stock === 0"
                 styleClass="ml-2" 
@@ -55,5 +56,34 @@
    } @else {
     <p class="no-variants">No hay stock disponible de {{product.name }} en este momento.</p>
    }
+
+   <div class="mini-cart" *ngIf="productoSeleccionado" [class.open]="carritoAbierto">
+    <div class="mini-cart-header">
+      <h3>🛒 Tu compra</h3>
+      <button class="close-btn" (click)="cerrarCarrito()">&times;</button>
+    </div>
+  
+    <div class="mini-cart-body">
+      <img [src]="productoSeleccionado.image" class="mini-cart-img" alt="Producto" />
+      <p class="producto-nombre">{{ product.name.toUpperCase() }}</p>
+      <p class="producto-detalle">Talle: <strong>{{ productoSeleccionado.size }}</strong> | Color: <strong>{{ productoSeleccionado.color }}</strong></p>
+      <p class="precio-unitario">Precio unitario: <strong>{{ product.price | currency:"USD" }}</strong></p>
+  
+      <div class="cantidad-container">
+        <label for="cantidad">Cantidad:</label>
+        <input 
+          type="number" 
+          min="1" 
+          max="2" 
+          [(ngModel)]="cantidad" 
+          class="cantidad-input"
+        />
+      </div>
+  
+      <p class="total">Total: <strong>{{ product.price * cantidad | currency:"USD" }}</strong></p>
+  
+      <button class="pagar-btn" (click)="pagarAhora()">Pagar con ePayco</button>
+    </div>
+  </div>
  
 

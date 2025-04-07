@@ -24,3 +24,18 @@ export interface SpecificShoe {
   sales: number,
   image: string,
 }
+
+export interface Orders {
+  user: string,
+  orderItems: [{
+    product: SpecificShoe,
+    quantity: number,
+    price: number
+  }],
+  paymentMethod: string,
+  totalAmount: number,
+  isPaid: boolean,
+  paidAt: Date,
+  status: string,
+  transactionId: string
+}

@@ -30,4 +30,10 @@ getProductsByGender(brand:any, gender:any):Observable<Product[]>{
 getProductById(id: string): Observable<Product[]> {
   return this.http.get<Product[]>(`${this.API_URL}/get_product/${id}`);
 }
+
+/***************************************************PAYMENTS***************************************************/
+
+createPaymentOrder(id: any, payload: any) {
+  return this.http.post<{ checkoutUrl: string }>(`${this.API_URL}/create_payment/${id}`, payload);
+}
 }
