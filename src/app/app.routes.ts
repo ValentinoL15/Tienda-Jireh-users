@@ -27,5 +27,9 @@ export const routes: Routes = [
   {
     path: '', redirectTo: '/dashboard', pathMatch: 'full'
   },
+  {
+    path: '**',
+    redirectTo: 'dashboard' // Manejo de rutas no encontradas
+  }
  
 ];
