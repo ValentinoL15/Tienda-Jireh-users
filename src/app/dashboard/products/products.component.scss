@@ -1,0 +1,86 @@
+.gallery-container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgb(214, 210, 210);
+  background-color: #e4e3e3;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.button {
+  margin-top: 10px;
+}
+
+.gallery-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.gallery-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px;
+  width: 220px; // 📏 más ancho en PC
+  height: 260px; // 📏 más alto en PC
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  img {
+    width: 100%;
+    height: 180px; // 🖼 imagen más grande
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .product-info {
+    margin-top: 8px;
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// 📱 Tablet chica / celular grande: 2 por fila
+@media (max-width: 600px) {
+  .gallery-card {
+    width: 45%;
+    height: 220px;
+
+    img {
+      height: 140px;
+    }
+  }
+}
+
+// 📱 Celular chico: 1 por fila
+@media (max-width: 400px) {
+  .gallery-card {
+    width: 100%;
+    height: 220px;
+
+    img {
+      height: 140px;
+    }
+  }
+}
