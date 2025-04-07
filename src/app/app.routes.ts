@@ -6,30 +6,17 @@ import { RegisterComponent } from './auth/register/register.component';
 import { PaymentResponseComponent } from './payments/payment-response/payment-response.component';
 
 export const routes: Routes = [
-  {
-    path: 'dashboard', loadComponent:() => import('./dashboard/home/home.component').then((m) => m.HomeComponent)
-  },
-  {
-    path: 'products/:brand/:gender', loadComponent:() => import('./dashboard/products/products.component').then((m) => m.ProductsComponent)
-  },
-  {
-    path: 'products/:brand/:gender/:id', loadComponent:() => import('./dashboard/products/specific-product/specific-product.component').then((m) => m.SpecificProductComponent)
-  },
-  {
-    path: 'register', loadComponent:() => import('./auth/register/register.component').then((m) => m.RegisterComponent)
-  },
-  {
-    path: 'profile', loadComponent:() => import('./auth/profile/profile.component').then((m) => m.ProfileComponent)
-  },
-  {
-    path: 'payment-response', component: PaymentResponseComponent 
-  },
-  {
-    path: '', redirectTo: '/dashboard', pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: 'dashboard' // Manejo de rutas no encontradas
-  }
- 
+  { path: 'dashboard', loadComponent: () => import('./dashboard/home/home.component').then(m => m.HomeComponent) },
+  { path: 'products/:brand/:gender', loadComponent: () => import('./dashboard/products/products.component').then(m => m.ProductsComponent) },
+  { path: 'products/:brand/:gender/:id', loadComponent: () => import('./dashboard/products/specific-product/specific-product.component').then(m => m.SpecificProductComponent) },
+  { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
+  { path: 'profile', loadComponent: () => import('./auth/profile/profile.component').then(m => m.ProfileComponent) },
+  { path: 'payment-response', component: PaymentResponseComponent },
+
+  // Redirección por defecto
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+  // Ruta comodín
+  { path: '**', redirectTo: 'dashboard' }
 ];
+
