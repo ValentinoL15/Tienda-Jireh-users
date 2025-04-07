@@ -21,6 +21,9 @@ export const routes: Routes = [
     path: 'profile', loadComponent:() => import('./auth/profile/profile.component').then((m) => m.ProfileComponent)
   },
   {
+    path: 'payment-response', loadComponent:() => import('./payments/payment-response/payment-response.component').then((m) => m.PaymentResponseComponent)
+  },
+  {
     path: '', redirectTo: '/dashboard', pathMatch: 'full'
   },
  
