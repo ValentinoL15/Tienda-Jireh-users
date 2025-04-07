@@ -3,6 +3,7 @@ import { HomeComponent } from './dashboard/home/home.component';
 import { ProductsComponent } from './dashboard/products/products.component';
 import { SpecificProductComponent } from './dashboard/products/specific-product/specific-product.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { PaymentResponseComponent } from './payments/payment-response/payment-response.component';
 
 export const routes: Routes = [
   {
@@ -21,7 +22,7 @@ export const routes: Routes = [
     path: 'profile', loadComponent:() => import('./auth/profile/profile.component').then((m) => m.ProfileComponent)
   },
   {
-    path: 'payment-response', loadComponent:() => import('./payments/payment-response/payment-response.component').then((m) => m.PaymentResponseComponent)
+    path: 'payment-response', component: PaymentResponseComponent 
   },
   {
     path: '', redirectTo: '/dashboard', pathMatch: 'full'

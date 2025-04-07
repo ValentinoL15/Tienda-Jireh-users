@@ -138,7 +138,7 @@ export class SpecificProductComponent implements OnInit{
       country: 'CO',
       lang: 'es',
       external: false,
-      response: 'https://tienda-jireh-users.vercel.app',
+      response: 'https://tienda-jireh-users.vercel.app/payment-response',
       confirmation: 'https://tienda-jireh-service-production.up.railway.app/webhook'
     };
   
