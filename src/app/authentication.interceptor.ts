@@ -10,6 +10,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  if (req.url.includes('/get_product/:id')) {
+    return next(req);
+  }
+
   const spinnerService = inject(SpinnerService)
   const token = localStorage.getItem("st_1892@121");
   const router = inject(Router)
