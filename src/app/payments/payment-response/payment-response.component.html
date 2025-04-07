@@ -8,17 +8,9 @@
     <h2>Estado del Pago</h2>
     <p>{{ paymentStatus }}</p>
     
-    <div *ngIf="paymentStatus === '¡Pago exitoso!'" class="success-message">
-      <i class="pi pi-check-circle"></i>
-      <p>Tu orden ha sido procesada exitosamente</p>
-      <button routerLink="/dashboard" pButton label="Ver mis órdenes"></button>
-    </div>
-
-    <div *ngIf="paymentStatus === 'Pago rechazado'" class="error-message">
-      <i class="pi pi-times-circle"></i>
-      <p>El pago no pudo ser procesado</p>
-      <button routerLink="/dashboard" pButton label="Volver al carrito"></button>
-    </div>
+    <p *ngIf="!loading && paymentStatus !== '¡Pago exitoso!' && paymentStatus !== 'Pago rechazado' && paymentStatus !== 'Pago pendiente'">
+      {{ paymentStatus }}
+    </p>
   </div>
 </div>
 

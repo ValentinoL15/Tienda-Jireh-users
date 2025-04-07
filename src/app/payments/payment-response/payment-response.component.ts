@@ -39,6 +39,7 @@ export class PaymentResponseComponent implements OnInit {
   verifyPayment(refPayco: string) {
     this.paymentService.verifyPayment(refPayco).subscribe({
       next: (response) => {
+        console.log('Payment verification response:', response);
         this.loading = false;
         
         if (response.success) {
@@ -46,14 +47,6 @@ export class PaymentResponseComponent implements OnInit {
             case 'Aceptada':
               this.paymentStatus = '¡Pago exitoso!';
               this.toastr.success('Tu pago ha sido procesado correctamente');
-              if (window.top !== window.self) {
-                window.parent.postMessage('close', '*');
-              } else {
-                // Redirigir si no está en iframe
-                setTimeout(() => {
-                  window.location.href = '/#/dashboard';
-                }, 4000);
-              }
               break;
             case 'Pendiente':
               this.paymentStatus = 'Pago pendiente';
