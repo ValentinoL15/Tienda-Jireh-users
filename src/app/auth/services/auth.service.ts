@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +57,9 @@ logOut(): void {
     this.tokenChangedSubject.next(null);
   }
   this.router.navigate(['/dashboard']);
+}
+
+register(form: any): Observable<any>{
+  return this.http.post(`${this.API_URL}/register`, form)
 }
 }

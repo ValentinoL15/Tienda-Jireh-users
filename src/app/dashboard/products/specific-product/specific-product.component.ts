@@ -9,6 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '@app/auth/services/auth.service';
 
 @Component({
   selector: 'app-specific-product',
@@ -22,6 +23,7 @@ export class SpecificProductComponent implements OnInit{
 
   //INJECTIONS
   private productServ = inject(ProductsService)
+  private authService = inject(AuthService)
   private route = inject(ActivatedRoute)
   private cd = inject(ChangeDetectorRef)
   private router = inject(Router)
@@ -33,6 +35,7 @@ export class SpecificProductComponent implements OnInit{
   id: any;
   responsiveOptions: any[] | undefined;
   ePayco: any;
+  token: any = null
   
   //INTERFACES
   product: Product = {
@@ -117,7 +120,7 @@ export class SpecificProductComponent implements OnInit{
         this.cd.markForCheck(); 
       },
       error: (err: any) => {
-        
+        this.toastr.error(err.error.message)
         console.log(err)
       }
     })
@@ -152,6 +155,11 @@ carritoAbierto = false;
 cantidad = 1;
 
 agregarAlCarrito(shoe: any) {
+  const token = this.authService.getToken()
+  if (!token) {
+    this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!')
+    return
+  }
   this.productoSeleccionado = shoe;
   this.cantidad = 1;
   this.carritoAbierto = true;

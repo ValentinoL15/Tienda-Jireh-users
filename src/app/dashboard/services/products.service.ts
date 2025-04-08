@@ -10,6 +10,7 @@ export class ProductsService {
 
   API_URL = 'https://tienda-jireh-service-production.up.railway.app/api/userJireh'
   //API_URL = 'http://localhost:4000/api/userJireh'
+  private apiColombia = 'https://api-colombia.com/api/v1/City';
 
   private http = inject(HttpClient)
 
@@ -42,4 +43,11 @@ verifyPayment(refPayco: string): Observable<any> {
     params: { ref_payco: refPayco }
   });
 }
+
+/*******************************************************CITIES*************************************************/
+
+getCities(): Observable<any[]> {
+  return this.http.get<any[]>(this.apiColombia);
+}
+
 }
