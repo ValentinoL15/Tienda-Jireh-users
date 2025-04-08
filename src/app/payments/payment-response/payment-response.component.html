@@ -5,7 +5,7 @@
   </div>
 
   <div *ngIf="!loading" class="payment-result">
-    <h2>Estado del Pago</h2>
+    <h2>Estado del Pago: </h2>
     <p>{{ paymentStatus }}</p>
     
     <p *ngIf="!loading && paymentStatus !== '¡Pago exitoso!' && paymentStatus !== 'Pago rechazado' && paymentStatus !== 'Pago pendiente'">
