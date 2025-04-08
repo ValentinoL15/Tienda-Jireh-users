@@ -43,7 +43,7 @@ export class PaymentResponseComponent implements OnInit {
         this.loading = false;
         
         if (response.success) {
-          switch (response.data.x_response) {
+          switch (response.x_response) { 
             case 'Aceptada':
               this.paymentStatus = '¡Pago exitoso!';
               this.toastr.success('Tu pago ha sido procesado correctamente');
