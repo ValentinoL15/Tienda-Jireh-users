@@ -31,7 +31,7 @@ export class PaymentResponseComponent implements OnInit {
         this.loading = false;
         return;
       }
-
+      console.log('Todos los query params:', params);
       this.verifyPayment(refPayco);
     });
   }
