@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '@app/dashboard/services/products.service';
 import { ToastrService } from 'ngx-toastr';
@@ -10,16 +10,17 @@ import { NgIf } from '@angular/common';
   imports: [MyComponent, NgIf],
   templateUrl: './payment-response.component.html',
   styleUrl: './payment-response.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentResponseComponent implements OnInit {
-  paymentStatus: string = '';
+  paymentStatus: string = 'Verificando...';
   loading = true;
 
   constructor(
     private route: ActivatedRoute,
     private paymentService: ProductsService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -63,12 +64,14 @@ export class PaymentResponseComponent implements OnInit {
           this.paymentStatus = 'Error al verificar el pago';
           this.toastr.error(response.message);
         }
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.loading = false;
         this.paymentStatus = 'Error de conexión';
         this.toastr.error('No se pudo verificar el estado del pago');
         console.error('Error verifying payment:', err);
+        this.cdr.markForCheck(); // 👈 También acá por si hay error
       }
     });
   }
