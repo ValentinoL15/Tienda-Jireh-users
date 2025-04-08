@@ -13,7 +13,7 @@ import { NgIf } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentResponseComponent implements OnInit {
-  paymentStatus: string = 'Verificando...';
+  paymentStatus: string = '';
   loading = true;
 
   constructor(
@@ -43,7 +43,7 @@ export class PaymentResponseComponent implements OnInit {
         this.loading = false;
         
         if (response.success) {
-          switch (response.x_response) { 
+          switch (response.data.x_response) { 
             case 'Aceptada':
               this.paymentStatus = '¡Pago exitoso!';
               this.toastr.success('Tu pago ha sido procesado correctamente');
