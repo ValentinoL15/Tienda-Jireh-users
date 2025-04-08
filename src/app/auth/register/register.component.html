@@ -3,45 +3,92 @@
   <p-button (onClick)="volver()" severity="contrast" icon="pi pi-arrow-left" label="Volver" ></p-button>
 </div>
 <div class="contenedor">
-  <form class="form">
+  <form class="form" [formGroup]="form" (ngSubmit)="registro()">
     <p class="title">Registro </p>
     <p class="message">Registrate para conseguir nuestros productos! </p>
     <div class="flex">
       <label>
-        <input required="" placeholder="" type="text" class="input">
+        <input required="" placeholder="" type="text" class="input" formControlName="name" name="name">
         <span>Nombre</span>
       </label>
   
       <label>
-        <input required="" placeholder="" type="text" class="input">
+        <input required="" placeholder="" type="text" class="input" formControlName="lastName" name="lastName">
         <span>Apellido</span>
       </label>
     </div>
 
     <label>
-      <input required="" placeholder="" type="address" class="input">
+      <p-dropdown 
+        [options]="genders" 
+        optionLabel="gender" 
+        placeholder="Selecciona un genero" 
+        formControlName="gender"
+        [showClear]="true"
+        [style]="{'width':'100%'}"
+        name="gender">
+      </p-dropdown>
+    </label>
+
+    <label>
+      <p-dropdown 
+        [options]="cities" 
+        optionLabel="name" 
+        placeholder="Seleccioná una ciudad" 
+        formControlName="city"
+        [filter]="true"
+        filterPlaceholder="Buscar ciudad"
+        [showClear]="true"
+        [style]="{'width':'100%'}"
+        name="city">
+      </p-dropdown>
+    </label>
+
+    <label>
+      <input required="true" placeholder="" type="address" class="input" formControlName="address" name="address">
       <span>Dirección</span>
     </label>
 
     <label>
-      <input required="" placeholder="" type="numberAddress" class="input">
+      <input required="true" placeholder="" type="numberAddress" class="input" formControlName="numberAddress" name="numberAddress">
       <span>Número de dirección</span>
+    </label>
+
+    <label class="phone-label">
+      <div class="phone-wrapper">
+        <span class="prefix">+57</span>
+        <input 
+          type="tel" 
+          maxlength="10"
+          pattern="[0-9]*"
+          inputmode="numeric"
+          class="input phone-input" 
+          formControlName="phone" 
+          name="phone" 
+          placeholder="3001234567">
+      </div>
+      <span>Teléfono</span>
+      <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="error-message">
+        <span *ngIf="form.get('phone')?.errors?.['pattern']">
+          Número inválido (debe tener 10 dígitos y empezar en 3)
+        </span>
+      </div>
     </label>
   
     <label>
-      <input required="" placeholder="" type="email" class="input">
+      <input required="true" placeholder="" type="email" class="input" formControlName="email" name="email">
       <span>Email</span>
     </label>
   
     <label>
-      <input required="" placeholder="" type="password" class="input">
+      <input required="true" placeholder="" type="password" class="input" formControlName="password" name="password">
       <span>Contraseña</span>
     </label>
     <label>
-      <input required="" placeholder="" type="password" class="input">
+      <input required="true" placeholder="" type="password" class="input" name="confrim_password" formControlName="confirm_password">
       <span>Confirmar Contraseña</span>
     </label>
-    <button class="submit">Submit</button>
+    <button type="submit" class="submit">Submit</button>
     <p class="signin">Ya tienes una cuenta ? <a href="/dashboard">Signin</a> </p>
   </form>
 </div>

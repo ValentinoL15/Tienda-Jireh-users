@@ -31,13 +31,17 @@ export class HomeComponent implements OnInit{
   
   }
 
+  get filteredProducts() {
+    return this.products.filter(p => p.shoes?.length > 0);
+  }
+
 getAllProducts(skip: number = 0, limit: number = this.limit) {
   this.productServ.getAllProducts(skip, limit).subscribe({
     next: (res: any) => {
       console.log('✅ Productos recibidos:', res);
       this.products = [...res.products]; // Clonar array para forzar detección de cambios
       this.totalRecords = res.total ?? 0;
-      this.cd.detectChanges(); // Forzar actualización del DOM
+      this.cd.markForCheck(); // Forzar actualización del DOM
     },
     error: (err: any) => {
       this.toastr.error(err.error.message)

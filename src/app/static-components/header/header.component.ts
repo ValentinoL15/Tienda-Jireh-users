@@ -63,9 +63,15 @@ export class HeaderComponent implements OnInit{
   ];
   
   logout() {
-    this.authService.logOut();
-    this.token = null
-    this.cd.detectChanges(); // Forzar detección de cam
+    try {
+      this.authService.logOut();
+      this.token = null
+      this.cd.detectChanges(); // Forzar detección de cam
+      this.toastr.success("Sesión cerrada con éxito")
+    } catch (error) {
+      this.toastr.error("Ocurrió un error inesperado")
+    }
+  
   }
 
   ngOnInit(): void {

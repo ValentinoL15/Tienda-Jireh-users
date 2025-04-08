@@ -63,6 +63,31 @@
   margin-top: 10px;
 }
 
+.phone-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prefix {
+  font-weight: bold;
+  font-size: 1rem;
+  background: #f0f0f0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.phone-input {
+  flex: 1;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
 /* El resto de tus estilos se mantienen igual */
 .title {
   font-size: 28px;
