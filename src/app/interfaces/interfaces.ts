@@ -39,14 +39,31 @@ export interface User {
   bought: number,
   discount: boolean,
   discount_percentage: number,
-  orders: Orders[]
+  orders: [{
+    _id: string,
+    user: string,
+    reference_id: string,
+    orderItems: [{
+      product: SpecificShoe,
+      quantity: number,
+      price: number
+    }],
+    paymentMethod: string,
+    totalAmount: number,
+    isPaid: boolean,
+    paidAt: Date,
+    status: string,
+    transactionId: string
+  }]
 }
 
 export interface Orders {
   _id: string,
   user: string,
+  reference_id: string,
   orderItems: [{
     product: SpecificShoe,
+    shoe_id: string,
     quantity: number,
     price: number
   }],

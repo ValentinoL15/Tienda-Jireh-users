@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { AuthService } from '@app/auth/services/auth.service';
 import { User } from '@app/interfaces/interfaces';
+import { SpinnerService } from '@app/spinner.service';
 import { ToastrService } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
 
@@ -13,6 +14,7 @@ import { TableModule } from 'primeng/table';
 })
 export class MyOrdersComponent implements OnInit{
   private authService = inject(AuthService)
+  private spinner = inject(SpinnerService)
   private toastr = inject(ToastrService)
   private cd = inject(ChangeDetectorRef)
   user: User = {
@@ -31,42 +33,48 @@ export class MyOrdersComponent implements OnInit{
       discount_percentage: 0,
       orders: [{
         _id: "",
+        reference_id: "",
         user: "",
         orderItems: [{
-            product: {
-              _id: "",
+          product: {
+            _id: "",
             shoe_id: "",
             size: 0,
             stock: 0,
             color: "",
             sales: 0,
             image: "",
-            },
-            quantity: 0,
-            price: 0
-          }],
-          paymentMethod: "",
-          totalAmount: 0,
-          isPaid: false,
-          paidAt: new Date(),
-          status: "",
-          transactionId: ""
+          },
+          quantity: 0,
+          price: 0
+        }],
+        paymentMethod: "",
+        totalAmount: 0,
+        isPaid: false,
+        paidAt: new Date(),
+        status: "", 
+        transactionId: ""
       }]
-    }
+  }
+  isLoaded = false;
 
   ngOnInit(): void {
+    this.spinner.show();
     this.getMyUser()
   }
 
   getMyUser(){
     this.authService.getUser().subscribe({
       next: (res:any) => {
-        this.user = res.user  
+        this.user = res.user 
+        this.isLoaded = true;
+        this.spinner.hide(); 
         this.cd.markForCheck()
       },
       error: (err:any) => {
         const msg = err?.message || 'Ocurrió un error inesperado';
         this.toastr.error(msg, 'Error');
+        this.spinner.hide();
       }
     })
   }

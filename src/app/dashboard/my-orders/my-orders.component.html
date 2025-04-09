@@ -1,28 +1,37 @@
-@if(user.orders.length === 0) {
-  <div>
-    No hay ordenes 
-  </div>
+@if (!isLoaded) {
+  <!-- No mostramos nada hasta que se cargue -->
 } @else {
-  <div>
-    <p-table [value]="user.orders" [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template #header>
+  @if(user.orders.length <= 0) {
+    <div class="no-orders-container">
+      <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Sin órdenes" class="empty-image" />
+      <h2>¡Aún no realizaste ninguna orden!</h2>
+      <p>Cuando compres algo, aparecerá acá 😉</p>
+      <button pButton type="button" label="Explorar productos" icon="pi pi-shopping-cart" routerLink="/products"></button>
+    </div>
+  } @else {
+    <div>
+      <table class="table table-striped">
+        <thead>
           <tr>
-              <th>Orden Nro°</th>
-              <th>Producto</th>
-              <th>Category</th>
-              <th>Quantity</th>
+            <th scope="col">Orden Nro°</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Precio</th>
           </tr>
-      </ng-template>
-      <ng-template #body let-product>
-          <tr>
-              <td>{{ product.code }}</td>
-              <td>{{ product.name }}</td>
-              <td>{{ product.category }}</td>
-              <td>{{ product.quantity }}</td>
-          </tr>
-      </ng-template>
-  </p-table>
-  
-  </div>
+        </thead>
+        <tbody>
+          @for (order of user.orders; track user._id){
+            <tr>
+              <th scope="row">{{order.reference_id}}</th>
+              @for(producto of order.orderItems; track producto.product._id){
+                <td>{{producto.product.image}}</td>
+                <td>{{producto.quantity}}</td>
+                <td>{{producto.price}}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 }
-

@@ -7,11 +7,12 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { MyComponent } from "./spinner.component";
 import { AuthService } from './auth/services/auth.service';
+import { CartPreviewComponent } from "./cart-preview.component";
 
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, ButtonModule, RouterOutlet, MatMenuModule, MatButtonModule, RouterLink, MatIconModule, MyComponent],
+  imports: [HeaderComponent, ButtonModule, RouterOutlet, MatMenuModule, MatButtonModule, RouterLink, MatIconModule, MyComponent, CartPreviewComponent],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

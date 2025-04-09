@@ -34,8 +34,8 @@ getProductById(id: string): Observable<Product[]> {
 
 /***************************************************PAYMENTS***************************************************/
 
-createPaymentOrder(id: any, payload: any) {
-  return this.http.post<{ checkoutUrl: string }>(`${this.API_URL}/create_payment/${id}`, payload);
+createPaymentOrder( payload: any) {
+  return this.http.post<{ checkoutUrl: string }>(`${this.API_URL}/create_payment`, payload);
 }
 
 verifyPayment(refPayco: string): Observable<any> {
