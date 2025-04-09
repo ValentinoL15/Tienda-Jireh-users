@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@app/auth/services/auth.service';
+import { CartService } from '@app/dashboard/services/cart.service';
 
 @Component({
   selector: 'app-specific-product',
@@ -28,6 +29,7 @@ export class SpecificProductComponent implements OnInit{
   private cd = inject(ChangeDetectorRef)
   private router = inject(Router)
   private toastr = inject(ToastrService)
+  private cartService = inject(CartService)
 
   //VARIABLES
   brand: string = '';
@@ -155,15 +157,23 @@ carritoAbierto = false;
 cantidad = 1;
 
 agregarAlCarrito(shoe: any) {
-  const token = this.authService.getToken()
+  const token = this.authService.getToken();
   if (!token) {
-    this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!')
-    return
+    this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!');
+    return;
   }
-  this.productoSeleccionado = shoe;
-  this.cantidad = 1;
-  this.carritoAbierto = true;
+
+  const item = {
+    product: shoe,
+    quantity: this.cantidad,
+    price: this.product.price,
+    parentProduct: this.product
+  };
+
+  this.cartService.addItem(item);
+  this.toastr.success('Producto agregado al carrito!');
 }
+
 
 cerrarCarrito() {
   this.carritoAbierto = false;
@@ -208,7 +218,7 @@ pagarAhora() {
     totalAmount: this.getTotal()
   };
 
-  this.productServ.createPaymentOrder(this.id, payload).subscribe({
+  this.productServ.createPaymentOrder(payload).subscribe({
     next: (res: any) => {
       const handler = (window as any).ePayco.checkout.configure({
         key: 'ae23dca89bab1bd8a75d3e66cbac05be',

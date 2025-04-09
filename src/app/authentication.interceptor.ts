@@ -6,8 +6,6 @@
 
   export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-    console.log(req)
-
     const publicUrls = [
       '/get_products',
       '/get_product/:id',
