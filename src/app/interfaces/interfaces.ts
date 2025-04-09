@@ -25,7 +25,25 @@ export interface SpecificShoe {
   image: string,
 }
 
+export interface User {
+  _id: string,
+  name: string,
+  gender: string,
+  lastName: string,
+  address: string,
+  numberAddress: number,
+  phone: string,
+  city: string,
+  email: string,
+  password: string,
+  bought: number,
+  discount: boolean,
+  discount_percentage: number,
+  orders: Orders[]
+}
+
 export interface Orders {
+  _id: string,
   user: string,
   orderItems: [{
     product: SpecificShoe,

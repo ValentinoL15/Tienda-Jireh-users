@@ -62,4 +62,9 @@ logOut(): void {
 register(form: any): Observable<any>{
   return this.http.post(`${this.API_URL}/register`, form)
 }
+
+getUser(){
+  return this.http.get(`${this.API_URL}/get_user`)
+}
+
 }

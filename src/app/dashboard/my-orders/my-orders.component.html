@@ -1,0 +1,28 @@
+@if(user.orders.length === 0) {
+  <div>
+    No hay ordenes 
+  </div>
+} @else {
+  <div>
+    <p-table [value]="user.orders" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template #header>
+          <tr>
+              <th>Orden Nro°</th>
+              <th>Producto</th>
+              <th>Category</th>
+              <th>Quantity</th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-product>
+          <tr>
+              <td>{{ product.code }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.quantity }}</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  
+  </div>
+}
+

@@ -1,11 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./static-components/header/header.component";
 import { ButtonModule } from 'primeng/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { MyComponent } from "../../spinner.component";
+import { MyComponent } from "./spinner.component";
+import { AuthService } from './auth/services/auth.service';
 
 
 @Component({
@@ -15,14 +16,15 @@ import { MyComponent } from "../../spinner.component";
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   private router = inject(Router)
- 
+  private authService = inject(AuthService)
+  token: any = null
+
   urls = {
     brands: ['Adidas', 'Nike', 'Dolce & Gabbana', 'Reebok', 'Under Armour', 'Iecog Sports', 'Diesel'],
   };
 
-  // Función para convertir nombres de marca a formato URL
   formatBrandForUrl(brand: string): string {
     return brand
                 .replace(/\s+/g, '')   
@@ -30,5 +32,13 @@ export class AppComponent {
                 .replace(/[\u0300-\u036f]/g, "");
   }
 
+  ngOnInit(): void {
+    
+  }
+
+  getToken(){
+    this.token = this.authService.getToken()
+    
+  }
 
 }
