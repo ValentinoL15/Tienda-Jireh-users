@@ -9,8 +9,8 @@ import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 })
 export class AuthService {
 
-  API_URL = 'https://tienda-jireh-service-production.up.railway.app/api/userJireh'
-  //API_URL = 'http://localhost:4000/api/userJireh'
+  //API_URL = 'https://tienda-jireh-service-production.up.railway.app/api/userJireh'
+  API_URL = 'http://localhost:4000/api/userJireh'
   private tokenKey = 'st_1892@121';
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
@@ -62,4 +62,9 @@ logOut(): void {
 register(form: any): Observable<any>{
   return this.http.post(`${this.API_URL}/register`, form)
 }
+
+getUser(){
+  return this.http.get(`${this.API_URL}/get_user`)
+}
+
 }

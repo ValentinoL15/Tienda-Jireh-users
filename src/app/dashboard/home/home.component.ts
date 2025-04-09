@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit{
 getAllProducts(skip: number = 0, limit: number = this.limit) {
   this.productServ.getAllProducts(skip, limit).subscribe({
     next: (res: any) => {
-      console.log('✅ Productos recibidos:', res);
       this.products = [...res.products]; // Clonar array para forzar detección de cambios
       this.totalRecords = res.total ?? 0;
       this.cd.markForCheck(); // Forzar actualización del DOM

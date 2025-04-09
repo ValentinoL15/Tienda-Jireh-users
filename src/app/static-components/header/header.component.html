@@ -8,13 +8,13 @@
     }
     @else if(authState === 'authenticated') {
       <div>
-        <button 
+          <button 
           class="login-button"
           icon="pi pi-user" 
           label="Mi cuenta" 
           (click)="menu.toggle($event)"
         >Mi cuenta</button>
-        
+    
         <p-overlayPanel #menu [dismissable]="true">
           <div class="flex flex-col gap-2 p-3 w-48">
             <button pButton 
@@ -24,10 +24,17 @@
               [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
               (click)="menu.hide()"
             ></button>
+
+            <button pButton 
+            class="p-button-text p-button-plain" 
+            label="Mis órdenes"
+            [routerLink]="['/my-orders']" routerLinkActive="router-link-active" 
+            (click)="menu.hide()"
+          ><i class="pi pi-shopping-cart" style="font-size: 1rem"></i></button>
             
             <button pButton 
               class="p-button-text p-button-plain" 
-              icon="pi pi-cog" 
+              icon="pi pi-cog"  
               label="Profile"
               [routerLink]="['/profile']" routerLinkActive="router-link-active" 
               (click)="menu.hide()"

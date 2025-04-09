@@ -1,8 +1,4 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './dashboard/home/home.component';
-import { ProductsComponent } from './dashboard/products/products.component';
-import { SpecificProductComponent } from './dashboard/products/specific-product/specific-product.component';
-import { RegisterComponent } from './auth/register/register.component';
 import { PaymentResponseComponent } from './payments/payment-response/payment-response.component';
 
 export const routes: Routes = [
@@ -12,7 +8,7 @@ export const routes: Routes = [
   { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
   { path: 'profile', loadComponent: () => import('./auth/profile/profile.component').then(m => m.ProfileComponent) },
   { path: 'payment-response', component: PaymentResponseComponent },
-
+  { path: 'my-orders', loadComponent: () => import('./dashboard/my-orders/my-orders.component').then((m) => m.MyOrdersComponent) },
   // Redirección por defecto
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 

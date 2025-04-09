@@ -53,7 +53,6 @@ export class ProductsComponent implements OnInit {
     this.productServ.getProductsByGender(this.brand, this.gender).subscribe({
       next: (res : any) => {
         this.products = res.shoes;
-        console.log(this.products)
       },
       error: (err) => {
         this.messageServ.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error desconocido' });
