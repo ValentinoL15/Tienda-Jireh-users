@@ -63,7 +63,6 @@ export class MyOrdersComponent implements OnInit{
       next: (res:any) => {
         this.user = res.user  
         this.cd.markForCheck()
-        console.log(this.user)
       },
       error: (err:any) => {
         const msg = err?.message || 'Ocurrió un error inesperado';

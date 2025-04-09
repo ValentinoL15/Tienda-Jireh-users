@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { MyComponent } from "../../spinner.component";
+import { MyComponent } from "./spinner.component";
 import { AuthService } from './auth/services/auth.service';
 
 

@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit{
     try {
       this.authService.logOut();
       this.token = null
-      this.cd.detectChanges(); // Forzar detección de cam
+      this.cd.markForCheck(); // Forzar detección de cam
       this.toastr.success("Sesión cerrada con éxito")
     } catch (error) {
       this.toastr.error("Ocurrió un error inesperado")
@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit{
     this.tokenSubscription = this.authService.tokenChanged$.subscribe(token => {
       this.token = token;
       this.authState = token ? 'authenticated' : 'unauthenticated';
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     });
   }
 
@@ -109,10 +109,11 @@ export class HeaderComponent implements OnInit{
         this.visible = false;
         this.form.reset();
         this.toastr.success(res.message + " " + res.name)
-        this.cd.detectChanges();
+        this.cd.markForCheck();
       },
       error: (err : any) => {
         this.toastr.error(err.error.message, "Error de Autenticación")
+        console.log(err)
       }
     })
   }

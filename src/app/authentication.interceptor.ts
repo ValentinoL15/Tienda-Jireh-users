@@ -1,12 +1,13 @@
-  import { HttpInterceptorFn } from '@angular/common/http';
+  import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
   import { inject } from '@angular/core';
   import { Router } from '@angular/router';
   import { catchError, finalize, throwError } from 'rxjs';
   import { SpinnerService } from './spinner.service';
-  import { AuthService } from './auth/services/auth.service';
-  import { ToastrService } from 'ngx-toastr';
 
   export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+    console.log(req)
+
     const publicUrls = [
       '/get_products',
       '/get_product/:id',
@@ -18,16 +19,16 @@
     }
 
     const spinnerService = inject(SpinnerService)
-    const authService = inject(AuthService)
-    const toastr = inject(ToastrService);
     const token = localStorage.getItem("st_1892@121");
     const router = inject(Router)
+  
+    spinnerService.show();
 
     if (!token) {
-      router.navigate(['/dashboard']);
-      return throwError(() => new Error('No authentication token found'));
+      router.navigate(['/login']);
+      return next(req); // Continúa la petición original (fallará, pero no bloqueará UI)
     }
-  
+
     const authRequest = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
@@ -36,11 +37,10 @@
   
     return next(authRequest).pipe(
       finalize(() => spinnerService.hide()),
-      catchError((error) => {
+      catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          toastr.error('Sesión expirada, por favor inicie sesión', 'Error de autenticación');
-          authService.logOut();
-          router.navigate(['/dashboard']);
+          // Redirigir a la página de login
+          router.navigate(['/login']);
         }
         return throwError(() => error);
       })

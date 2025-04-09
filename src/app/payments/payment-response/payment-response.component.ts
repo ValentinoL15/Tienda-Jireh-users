@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { ActivatedRoute } from '@angular/router';
 import { ProductsService } from '@app/dashboard/services/products.service';
 import { ToastrService } from 'ngx-toastr';
-import { MyComponent } from "../../../../spinner.component";
+import { MyComponent } from "../../spinner.component";
 import { NgIf } from '@angular/common';
 
 @Component({

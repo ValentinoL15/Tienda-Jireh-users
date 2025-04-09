@@ -43,6 +43,7 @@ getAllProducts(skip: number = 0, limit: number = this.limit) {
       this.cd.markForCheck(); // Forzar actualización del DOM
     },
     error: (err: any) => {
+      console.error(err);
       this.toastr.error(err.error.message)
     }
   });
