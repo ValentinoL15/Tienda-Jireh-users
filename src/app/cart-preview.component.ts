@@ -158,7 +158,7 @@ export class CartPreviewComponent {
           amount: res.amount,
           country: res.country,
           lang: 'es',
-          external: 'true',
+          external: 'false', 
           response: res.response,
           confirmation: res.confirmation
         };
