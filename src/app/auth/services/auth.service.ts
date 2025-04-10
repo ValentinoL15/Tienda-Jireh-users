@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { CartService } from '@app/dashboard/services/cart.service';
 import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -16,11 +17,10 @@ export class AuthService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
   private http = inject(HttpClient)
   private router = inject(Router)
+  private cartService = inject(CartService)
   private tokenChangedSubject = new Subject<string | null>();
   public tokenChanged$ = this.tokenChangedSubject.asObservable();
   
-  
-
 /***********************************************LOGIN****************************************************/ 
 
 getToken(): string | null {
@@ -55,6 +55,7 @@ logOut(): void {
   if (isPlatformBrowser(this.platformId)) {
     localStorage.removeItem(this.tokenKey);
     this.tokenChangedSubject.next(null);
+    this.cartService.clearCart(); // limpia carrito
   }
   this.router.navigate(['/dashboard']);
 }

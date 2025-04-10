@@ -57,7 +57,9 @@ export class CartService {
 
   clearCart() {
     this.cartItems.set([]);
-    localStorage.removeItem('cart');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('cart');
+    }
   }
 
   getTotal() {
