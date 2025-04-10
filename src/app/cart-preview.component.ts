@@ -1,21 +1,24 @@
 // cart-preview.component.ts
 import { CommonModule } from "@angular/common";
-import { Component, signal, inject } from "@angular/core";
+import { Component, signal, inject, OnInit, effect } from "@angular/core";
 import { CartService } from "./dashboard/services/cart.service";
 import { RouterModule } from "@angular/router";
 import { ProductsService } from "./dashboard/services/products.service";
 import { ToastrService } from "ngx-toastr";
+import { AuthService } from "./auth/services/auth.service";
 
 @Component({
   selector: 'app-cart-preview',
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <div class="cart-toggle" (click)="toggle()">
-      🛒 <span *ngIf="cartItems().length">{{ cartItems().length }}</span>
-    </div>
+  @if(this.token !== null && this.cartItems().length > 0) {
+  <div class="cart-toggle" (click)="toggle()">
+    🛒<span>{{ cartItems().length }}</span>
+  </div>
+}
 
-    <div *ngIf="open()" class="cart-preview">
+<div *ngIf="open()" [ngClass]="{ 'cart-preview': true, 'open': open() }">
       <div *ngIf="cartItems().length; else emptyCart">
         <div *ngFor="let item of cartItems(); let i = index" class="cart-item">
           <img [src]="item.product.image" />
@@ -41,69 +44,109 @@ import { ToastrService } from "ngx-toastr";
     </div>
   `,
   styles: [`
-    .cart-toggle {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: #000;
-      color: white;
-      padding: 10px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 10000;
-    }
-    .cart-preview {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      width: 300px;
-      max-height: 80vh;
-      overflow-y: auto;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      padding: 10px;
-      z-index: 9999;
-    }
-    .cart-item {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 10px;
-    }
-    img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .cart-actions {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
+    .cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9998;
+}
+
+.cart-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #000;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10000;
+}
+
+.cart-preview {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 320px;
+  background: white;
+  border-left: 1px solid #ccc;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.cart-preview.open {
+  transform: translateX(0);
+}
+
+.cart-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.cart-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0056b3;
+}
   `]
 })
-export class CartPreviewComponent {
+export class CartPreviewComponent implements OnInit{
   private cartService = inject(CartService);
   private productServ = inject(ProductsService);
   private toastr = inject(ToastrService)
+  private authService = inject(AuthService)
   cartItems = this.cartService.getItems();
   open = signal(false);
+  token: string | null = null;
+  previousLength = 0;
+
+  constructor() {
+    effect(() => {
+      const items = this.cartItems();
+
+      if (items.length > this.previousLength) {
+        this.open.set(true);
+      }
+
+      if (items.length === 0) {
+        this.open.set(false);
+      }
+
+      this.previousLength = items.length;
+    });
+  }
 
   toggle() {
     this.open.set(!this.open());
@@ -121,8 +164,12 @@ export class CartPreviewComponent {
     return this.cartService.getTotal();
   }
 
-  goToCheckout() {
-    // Podés hacer un router.navigate o abrir un modal
+  getToken(){
+    this.token = this.authService.getToken()
+  }
+  
+  ngOnInit(): void {
+    this.getToken()
   }
 
   pagarTodoElCarrito() {
