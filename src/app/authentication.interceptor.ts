@@ -22,11 +22,6 @@
   
     spinnerService.show();
 
-    if (!token) {
-      router.navigate(['/login']);
-      return next(req); // Continúa la petición original (fallará, pero no bloqueará UI)
-    }
-
     const authRequest = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`

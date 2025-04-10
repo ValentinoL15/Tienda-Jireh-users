@@ -4,6 +4,7 @@ import { Component, signal, inject } from "@angular/core";
 import { CartService } from "./dashboard/services/cart.service";
 import { RouterModule } from "@angular/router";
 import { ProductsService } from "./dashboard/services/products.service";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-cart-preview',
@@ -100,6 +101,7 @@ import { ProductsService } from "./dashboard/services/products.service";
 export class CartPreviewComponent {
   private cartService = inject(CartService);
   private productServ = inject(ProductsService);
+  private toastr = inject(ToastrService)
   cartItems = this.cartService.getItems();
   open = signal(false);
 
@@ -165,6 +167,7 @@ export class CartPreviewComponent {
       },
       error: (err: any) => {
         console.error('Error creando orden de pago', err);
+        this.toastr.error(err.error.message)
       }
     });
   }

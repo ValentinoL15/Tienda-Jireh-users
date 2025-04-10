@@ -4,10 +4,11 @@ import { User } from '@app/interfaces/interfaces';
 import { SpinnerService } from '@app/spinner.service';
 import { ToastrService } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
+import { Image } from 'primeng/image';
 
 @Component({
   selector: 'app-my-orders',
-  imports: [TableModule],
+  imports: [TableModule,Image],
   templateUrl: './my-orders.component.html',
   styleUrl: './my-orders.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -67,6 +68,7 @@ export class MyOrdersComponent implements OnInit{
     this.authService.getUser().subscribe({
       next: (res:any) => {
         this.user = res.user 
+        console.log(this.user)
         this.isLoaded = true;
         this.spinner.hide(); 
         this.cd.markForCheck()
