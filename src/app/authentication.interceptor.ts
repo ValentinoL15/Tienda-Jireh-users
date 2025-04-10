@@ -3,6 +3,8 @@
   import { Router } from '@angular/router';
   import { catchError, finalize, throwError } from 'rxjs';
   import { SpinnerService } from './spinner.service';
+import { AuthService } from './auth/services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
   export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
@@ -19,6 +21,8 @@
     const spinnerService = inject(SpinnerService)
     const token = localStorage.getItem("st_1892@121");
     const router = inject(Router)
+    const authService = inject(AuthService)
+    const toastr = inject(ToastrService)
   
     spinnerService.show();
 
@@ -32,8 +36,9 @@
       finalize(() => spinnerService.hide()),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          // Redirigir a la página de login
-          router.navigate(['/login']);
+          router.navigate(['/dashboard']);
+          authService.logOut()
+          toastr.info('Por favor vuelve a iniciar sesión para incorporar productos')
         }
         return throwError(() => error);
       })

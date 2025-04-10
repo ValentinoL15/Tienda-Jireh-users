@@ -23,15 +23,15 @@
         <tbody>
           @for (order of user.orders; track user._id){
             @for(producto of order.orderItems; track producto.product._id){
-            <tr>
-              <th scope="row">{{order.reference_id}}</th>
-              <td>
-                <p-image [src]="producto.product.image" alt="Image" width="50" height="50" [preview]="true" />
-              </td>
-                <td>{{producto.quantity}}</td>
-                <td>{{producto.price}}</td>
-                <td>{{order.status}}</td>
-            </tr>
+              <tr>
+                <th scope="row" class="align-middle">{{order.reference_id}}</th>
+                <td class="align-middle">
+                  <p-image [src]="producto.product.image" alt="Image" width="30" height="30" [preview]="true" />
+                </td>
+                <td class="align-middle">{{producto.quantity}}</td>
+                <td class="align-middle">{{producto.price}}</td>
+                <td class="align-middle">{{order.status}}</td>
+              </tr>
           }
         }
         </tbody>

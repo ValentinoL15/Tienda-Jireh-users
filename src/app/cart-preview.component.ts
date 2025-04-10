@@ -43,8 +43,8 @@ import { ToastrService } from "ngx-toastr";
   styles: [`
     .cart-toggle {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      bottom: 20px;
+      left: 20px;
       background: #000;
       color: white;
       padding: 10px;
