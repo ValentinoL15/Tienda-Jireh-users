@@ -125,51 +125,81 @@ export class CartPreviewComponent {
     // Podés hacer un router.navigate o abrir un modal
   }
 
-  pagarTodoElCarrito() {
-    const cartItems = this.cartItems();
-    if (cartItems.length === 0) return;
-  
-    const payload = {
-      user: localStorage.getItem('st_1892@121'), // o desde tu auth
-      orderItems: cartItems.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      paymentMethod: 'ePayco', // o el método que manejes
-      totalAmount: this.total()
-    };
-
-    const userId = localStorage.getItem('st_1892@121'); // adaptá según manejes el auth
-    if (!userId) return alert('Usuario no identificado');
-  
-    this.productServ.createPaymentOrder(payload).subscribe({
-      next: (res: any) => {
-        const handler = (window as any).ePayco.checkout.configure({
-          key: 'ae23dca89bab1bd8a75d3e66cbac05be',
-          test: true
-        });
-  
-        const data = {
-          name: res.name,
-          description: res.description,
-          invoice: res.invoice,
-          currency: res.currency,
-          amount: res.amount,
-          country: res.country,
-          lang: 'es',
-          external: true,
-          response: res.response,
-          confirmation: res.confirmation
-        };
-  
-        handler.open(data);
-      },
-      error: (err: any) => {
-        console.error('Error creando orden de pago', err);
-        this.toastr.error(err.error.message)
+  async pagarTodoElCarrito() {
+    try {
+      const cartItems = this.cartItems();
+      if (cartItems.length === 0) {
+        this.toastr.warning('El carrito está vacío');
+        return;
       }
-    });
+  
+      // Obtener datos del usuario
+      const userData = localStorage.getItem('st_1892@121');
+      if (!userData) {
+        this.toastr.error('Usuario no identificado');
+        return;
+      }
+  
+      // Preparar payload
+      const payload = {
+        user: JSON.parse(userData), // Asumiendo que guardas un objeto JSON
+        orderItems: cartItems.map(item => ({
+          _id: item.product._id, // Cambiado de 'product' a '_id' para coincidir con tu backend
+          quantity: item.quantity,
+          price: item.price
+        })),
+        paymentMethod: 'credit_card', // Más específico que 'ePayco'
+        totalAmount: this.total()
+      };
+  
+      // Crear orden de pago
+      this.productServ.createPaymentOrder(payload).subscribe({
+        next: (res: any) => {
+          // Verificar que la respuesta tenga los datos necesarios
+          if (!res || !res.invoice) {
+            throw new Error('Respuesta del servidor incompleta');
+          }
+  
+          // Configurar ePayco
+          const handler = (window as any).ePayco.checkout.configure({
+            key: 'ae23dca89bab1bd8a75d3e66cbac05be', // Reemplaza con tu llave pública
+            test: true // Cambiar a false en producción
+          });
+  
+          // Datos para el checkout
+          const checkoutData = {
+            name: res.name || 'Compra en tu tienda',
+            description: res.description || 'Pago de productos',
+            invoice: res.invoice,
+            currency: res.currency || 'COP',
+            amount: res.amount,
+            tax_base: res.amount, // Importante para Colombia
+            tax: '0',
+            country: res.country || 'CO',
+            lang: 'es',
+            external: 'true', // Usar checkout externo para evitar problemas
+            response: res.response || `${window.location.origin}/payment-response`,
+            confirmation: res.confirmation || `${window.location.origin}/payment-confirmation`,
+            
+            // Datos adicionales recomendados
+            name_billing: payload.user.name || 'Cliente',
+            email_billing: payload.user.email || 'cliente@example.com',
+            address_billing: payload.user.address || 'Calle falsa 123',
+            phone_billing: payload.user.phone || '3000000000'
+          };
+  
+          // Abrir checkout
+          handler.open(checkoutData);
+        },
+        error: (err) => {
+          console.error('Error en el pago:', err);
+          this.toastr.error(err.error?.message || 'Error al procesar el pago');
+        }
+      });
+    } catch (error) {
+      console.error('Error inesperado:', error);
+      this.toastr.error('Ocurrió un error inesperado');
+    }
   }
 }
 
