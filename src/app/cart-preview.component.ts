@@ -6,11 +6,12 @@ import { RouterModule } from "@angular/router";
 import { ProductsService } from "./dashboard/services/products.service";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "./auth/services/auth.service";
+import { ButtonModule } from "primeng/button";
 
 @Component({
   selector: 'app-cart-preview',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule,ButtonModule],
   template: `
   @if(this.token !== null && this.cartItems().length > 0) {
   <div class="cart-toggle" (click)="toggle()">
@@ -19,6 +20,7 @@ import { AuthService } from "./auth/services/auth.service";
 }
 
 <div *ngIf="open()" [ngClass]="{ 'cart-preview': true, 'open': open() }">
+<p-button severity="contrast" size="small" [rounded]="true" class="closes-btn" (click)="toggle()">X</p-button>
       <div *ngIf="cartItems().length; else emptyCart">
         <div *ngFor="let item of cartItems(); let i = index" class="cart-item">
           <img [src]="item.product.image" />
@@ -52,6 +54,21 @@ import { AuthService } from "./auth/services/auth.service";
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   z-index: 9998;
+}
+
+.closes-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+.closes-btn:hover {
+  color: #ff0000;
 }
 
 .cart-toggle {
@@ -158,6 +175,7 @@ export class CartPreviewComponent implements OnInit{
 
   clear() {
     this.cartService.clearCart();
+    this.open.set(false);
   }
 
   total() {
@@ -211,6 +229,7 @@ export class CartPreviewComponent implements OnInit{
         };
   
         handler.open(data);
+        this.open.set(false);
       },
       error: (err: any) => {
         console.error('Error creando orden de pago', err);
