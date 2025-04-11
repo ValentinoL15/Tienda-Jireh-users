@@ -16,10 +16,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes ,withComponentInputBinding()), provideHttpClient(withFetch(), withInterceptors([SpinnerInterceptor, authInterceptor])),
     provideClientHydration(withEventReplay()),
     provideAnimations(),
-    provideToastr({  // Posición abajo-derecha (recomendado)
+    provideToastr({
       preventDuplicates: true,              // Evita mensajes duplicados
       progressBar: true,                    // Muestra barra de progreso
-      timeOut: 5000,                        // Duración 5 segundos
+      timeOut: 4000,                        // Duración 5 segundos
       closeButton: true,                    // Botón de cerrar visible
       tapToDismiss: false,                  // Requiere clic explícito para cerrar
       enableHtml: true                      // Permite HTML en mensajes
