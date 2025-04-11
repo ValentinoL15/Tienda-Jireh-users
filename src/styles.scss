@@ -57,6 +57,9 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-
+.custom-toast {
+  margin-top: 80px !important;  // Ajusta según la altura de tu header
+  pointer-events: auto !important;  // Asegura que sean clickeables
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

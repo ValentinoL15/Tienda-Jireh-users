@@ -122,7 +122,6 @@ export class SpecificProductComponent implements OnInit{
         this.cd.markForCheck(); 
       },
       error: (err: any) => {
-        this.toastr.error(err.error.message)
         console.log(err)
       }
     })
@@ -160,6 +159,9 @@ agregarAlCarrito(shoe: any) {
   const token = this.authService.getToken();
   if (!token) {
     this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!');
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
     return;
   }
 
@@ -172,6 +174,9 @@ agregarAlCarrito(shoe: any) {
 
   this.cartService.addItem(item);
   this.toastr.success('Producto agregado al carrito!');
+  setTimeout(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, 100);
 }
 
 
@@ -204,6 +209,9 @@ getTotal(): number {
 pagarAhora() {
   if (!(window as any).ePayco) {
     this.toastr.error('ePayco no se ha cargado correctamente. Intentá de nuevo.');
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
     return;
   }
 
