@@ -100,6 +100,9 @@ registro(){
       },
       error: (err : any) => {
         console.error('Error al registrar usuario:', err);
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
         this.toastr.error(err.error.message)
       }
     })

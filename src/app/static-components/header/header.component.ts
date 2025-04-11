@@ -113,6 +113,7 @@ export class HeaderComponent implements OnInit{
       },
       error: (err : any) => {
         this.toastr.error(err.error.message, "Error de Autenticación")
+        
         console.log(err)
       }
     })
