@@ -129,7 +129,7 @@ export class CartPreviewComponent implements OnInit{
   private authService = inject(AuthService)
   cartItems = this.cartService.getItems();
   open = signal(false);
-  token: string | null = null;
+  token = signal<string | null>(null);
   previousLength = 0;
 
   constructor() {
@@ -165,7 +165,7 @@ export class CartPreviewComponent implements OnInit{
   }
 
   getToken(){
-    this.token = this.authService.getToken()
+    this.token.set(this.authService.getToken());
   }
   
   ngOnInit(): void {
