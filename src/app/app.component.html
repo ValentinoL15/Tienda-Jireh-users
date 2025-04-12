@@ -1,36 +1,38 @@
 
 <div class="container">
   <app-header></app-header>
-  <div class="buttons">
-    <button mat-button [routerLink]="['']"> Home</button>
-    @for (brand of urls.brands; track brand) {
-      <button mat-button [matMenuTriggerFor]="menu">
-        {{brand}}
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item 
-                [routerLink]="['/products', formatBrandForUrl(brand), 'Hombre']">
-          Hombres
-        </button>
-        <button mat-menu-item 
-                [routerLink]="['/products', formatBrandForUrl(brand), 'Mujer']">
-          Mujeres
-        </button>
-        <button mat-menu-item 
-                [routerLink]="['/products', formatBrandForUrl(brand), 'Niños']">
-          Niños
-        </button>
-        <button mat-menu-item 
-                [routerLink]="['/products', formatBrandForUrl(brand), 'Niñas']">
-          Niñas
-        </button>
-        <button mat-menu-item 
-                [routerLink]="['/products', formatBrandForUrl(brand), 'Unisex']">
-          Unisex
-        </button>
-      </mat-menu>
-    }
+  <div >
+    <p-menubar [model]="items" />
   </div>
+ 
   <app-spinner></app-spinner>
 <router-outlet></router-outlet>
 <app-cart-preview></app-cart-preview>
+
+<!-- 
+<p-megamenu [model]="items">
+      <ng-template #item let-item>
+        <ng-container *ngIf="item.items">
+          <span class="p-menuitem-link">
+            <span [class]="item.icon"></span>
+            <span class="ml-2">{{ item.label }}</span>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!item.items">
+
+          <ng-container *ngIf="item.route; else elseBlock">
+            <a [routerLink]="item.route" class="p-menuitem-link">
+              <span [class]="item.icon"></span>
+              <span class="ml-2">{{ item.label }}</span>
+            </a>
+          </ng-container>
+          <ng-template #elseBlock>
+            <a [href]="item.url" class="p-menuitem-link">
+              <span [class]="item.icon"></span>
+              <span class="ml-2">{{ item.label }}</span>
+            </a>
+          </ng-template>
+        </ng-container>
+      </ng-template>
+    </p-megamenu>
+-->
