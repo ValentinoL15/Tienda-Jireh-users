@@ -1,18 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./static-components/header/header.component";
 import { ButtonModule } from 'primeng/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
 import { MyComponent } from "./spinner.component";
 import { AuthService } from './auth/services/auth.service';
 import { CartPreviewComponent } from "./cart-preview.component";
-
+import { CommonModule } from '@angular/common';
+import { Menubar } from 'primeng/menubar';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, ButtonModule, RouterOutlet, MatMenuModule, MatButtonModule, RouterLink, MatIconModule, MyComponent, CartPreviewComponent],
+  imports: [HeaderComponent, ButtonModule, RouterOutlet, MyComponent, CartPreviewComponent,CommonModule,Menubar],
   standalone: true,
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -22,24 +21,174 @@ export class AppComponent implements OnInit{
   private authService = inject(AuthService)
   token: any = null
 
-  urls = {
-    brands: ['Adidas', 'Nike', 'Dolce & Gabbana', 'Reebok', 'Under Armour', 'Iecog Sports', 'Diesel'],
-  };
+  items: MenuItem[] | undefined;
 
-  formatBrandForUrl(brand: string): string {
+  ngOnInit(): void {
+    this.items = [
+      {
+        label: 'Categorias',
+        icon: 'pi pi-search',
+        items: [
+            {
+                label: 'Components',
+                icon: 'pi pi-bolt'
+            },
+            {
+                label: 'Blocks',
+                icon: 'pi pi-server'
+            },
+            {
+                label: 'UI Kit',
+                icon: 'pi pi-pencil'
+            },
+        ]
+    },
+      {
+          label: 'Home',
+          icon: 'pi pi-home'
+      },
+      {
+          label: 'Productos',
+          icon: 'pi pi-star'
+      },
+      {
+        label: 'Más Populares',
+        icon: 'pi pi-star'
+    },
+    {
+      label: 'Más Vendidos',
+      icon: 'pi pi-star'
+  },
+      {
+          label: 'Contacto',
+          icon: 'pi pi-envelope'
+      }
+  ]
+  }
+
+ /* this.items = [
+    {
+        label: 'Hombre',
+        icon: 'pi pi-box',
+        items: [
+            [
+                {
+                    label: 'Adidas',
+                    items: [
+                        { label: 'SuperStar', route: '/register'},
+                        { label: 'Street' },
+                        { label: 'Tenis' },
+                        { label: 'Adizero' },
+                    ],
+                },
+            ],
+            [
+              {
+                label: "Nike",
+                items: [
+                  { label: 'Air Force' },
+                  { label: 'Street' },
+                  { label: 'Outdoor' },
+                  { label: 'Predator' },
+                ]
+              }
+            ],
+            [
+              {
+                label: "Nike",
+                items: [
+                  { label: 'Air Force' },
+                  { label: 'Street' },
+                  { label: 'Outdoor' },
+                  { label: 'Predator' },
+                ]
+              }
+            ]
+        ],
+    },
+    {
+        label: 'Mujer',
+        icon: 'pi pi-mobile',
+        items: [
+            [
+                {
+                    label: 'Computer',
+                    items: [
+                        { label: 'Monitor' },
+                        { label: 'Mouse' },
+                        { label: 'Notebook' },
+                        { label: 'Keyboard' },
+                        { label: 'Printer' },
+                        { label: 'Storage' },
+                    ],
+                },
+            ],
+            [
+                {
+                    label: 'Home Theater',
+                    items: [{ label: 'Projector' }, { label: 'Speakers' }, { label: 'TVs' }],
+                },
+            ],
+            [
+                {
+                    label: 'Gaming',
+                    items: [{ label: 'Accessories' }, { label: 'Console' }, { label: 'PC' }, { label: 'Video Games' }],
+                },
+            ],
+            [
+                {
+                    label: 'Appliances',
+                    items: [
+                        { label: 'Coffee Machine' },
+                        { label: 'Fridge' },
+                        { label: 'Oven' },
+                        { label: 'Vaccum Cleaner' },
+                        { label: 'Washing Machine' },
+                    ],
+                },
+            ],
+        ],
+    },
+    {
+        label: 'Niños',
+        icon: 'pi pi-clock',
+        items: [
+            [
+                {
+                    label: 'Football',
+                    items: [{ label: 'Kits' }, { label: 'Shoes' }, { label: 'Shorts' }, { label: 'Training' }],
+                },
+            ],
+            [
+                {
+                    label: 'Running',
+                    items: [{ label: 'Accessories' }, { label: 'Shoes' }, { label: 'T-Shirts' }, { label: 'Shorts' }],
+                },
+            ],
+            [
+                {
+                    label: 'Swimming',
+                    items: [{ label: 'Kickboard' }, { label: 'Nose Clip' }, { label: 'Swimsuits' }, { label: 'Paddles' }],
+                },
+            ],
+            [
+                {
+                    label: 'Tennis',
+                    items: [{ label: 'Balls' }, { label: 'Rackets' }, { label: 'Shoes' }, { label: 'Training' }],
+                },
+            ],
+        ],
+    },
+];*/
+
+    /*formatBrandForUrl(brand: string): string {
     return brand
                 .replace(/\s+/g, '')   
                 .normalize("NFD")
                 .replace(/[\u0300-\u036f]/g, "");
-  }
-
-  ngOnInit(): void {
-    
-  }
-
-  getToken(){
+  }*/
+  /*getToken(){
     this.token = this.authService.getToken()
-    
-  }
+  }*/
 
 }
