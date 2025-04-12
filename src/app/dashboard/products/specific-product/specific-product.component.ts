@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { ProductsService } from '../../services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../../interfaces/interfaces';
-import { MessageService } from 'primeng/api';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -11,6 +10,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@app/auth/services/auth.service';
 import { CartService } from '@app/dashboard/services/cart.service';
+import { ColorPicker } from 'primeng/colorpicker';
 
 @Component({
   selector: 'app-specific-product',
@@ -38,6 +38,7 @@ export class SpecificProductComponent implements OnInit{
   responsiveOptions: any[] | undefined;
   ePayco: any;
   token: any = null
+  color: string | undefined;
   
   //INTERFACES
   product: Product = {

@@ -3,59 +3,31 @@
 <div class="button">
   <p-button (onClick)="volver()" severity="contrast" icon="pi pi-arrow-left" label="Volver" ></p-button>
 </div>
-  <!-- Carousel de Variantes (Talles/Colores) -->
-  @if(product.shoes.length > 0) {
-    <div class="gallery-container">
-      <!-- Producto Principal (Destacado) -->
-      <div class="main-product-wrapper">
-        <div class="main-product-card">
-          <div class="image-container">
-            <p style="width: 100%; display: flex; justify-content: center; align-items: center; margin: 10px; font-weight: bold;">
-              {{product.name.toLocaleUpperCase()}}
-            </p>
-            <img 
-              [src]="product.image" 
-              [alt]="product.name" 
-              class="main-product-image" 
-            />
+
+  <div class="product">
+    <div class="image">
+      <img [src]="product.image" alt="">
+    </div>
+    <div class="filters">
+      <p>{{product.type}}</p>
+      <p style="font-weight: bold; font-size: 2rem;">{{product.name}}</p>
+      <p style="font-weight: bold;">{{product.price | currency: 'USD'}}</p>
+      <p>Color</p>
+      <div style="display: flex; flex-direction: row; gap: 10px;">
+        @for (color of product.shoes; track product._id) {
+          <div style="width: 20px; height: 20px; gap: 10px; display: flex;" [style.background-color]="color.color">
+            
           </div>
+        }
+      </div>
+      <p>Talles</p>
+      <div class="talles">
+        <div >
+
         </div>
       </div>
-      
-    <p-carousel [value]="product.shoes" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="responsiveOptions" class="custom-carousel">
-      <ng-template let-shoe pTemplate="item">
-        <div class="variant-card" [class.disabled]="shoe.stock === 0">
-          <div class="variant-image-container">
-            <img 
-              [src]="shoe.image" 
-              [alt]="shoe.color + ' ' + product.name" 
-              class="variant-image"
-            />
-            <p-tag 
-              [value]="shoe.stock > 0 ? 'Disponible' : 'Sin stock'"
-              [severity]="shoe.stock > 0 ? 'success' : 'danger'"
-              class="variant-badge"
-            />
-          </div>
-          <div class="variant-details">
-            <p style="font-weight: bold;"><strong>Talle:</strong> {{ shoe.size }} | <strong>Color:</strong> {{ shoe.color }}</p>
-            <div class="variant-actions">
-              <strong style="font-weight: bold;">{{product.price | currency:"USD"}}</strong>
-              <p-button 
-                (click)="agregarAlCarrito(shoe)"
-                icon="pi pi-shopping-cart" 
-                [disabled]="shoe.stock === 0"
-                styleClass="ml-2" 
-              />
-            </div>
-          </div>
-        </div>
-      </ng-template>
-    </p-carousel>
+    </div>
   </div>
-   } @else {
-    <p class="no-variants">No hay stock disponible de {{product.name }} en este momento.</p>
-   }
 
    <div class="mini-cart" *ngIf="productoSeleccionado" [class.open]="carritoAbierto">
     <div class="mini-cart-header">

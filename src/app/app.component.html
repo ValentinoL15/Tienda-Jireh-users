@@ -2,7 +2,30 @@
 <div class="container">
   <app-header></app-header>
   <div >
-    <p-menubar [model]="items" />
+    <p-menubar [model]="items">
+      <ng-template #item let-item>
+        <ng-container *ngIf="item.items">
+          <span class="p-menuitem-link">
+            <span [class]="item.icon"></span>
+            <span class="custom-margin">{{ item.label }}</span>
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!item.items">
+          <ng-container *ngIf="item.route; else elseBlock">
+            <a [routerLink]="item.route" class="p-menuitem-link">
+              <span [class]="item.icon"></span>
+              <span class="custom-margin">{{ item.label }}</span>
+            </a>
+          </ng-container>
+          <ng-template #elseBlock>
+            <a [href]="item.url" class="p-menuitem-link">
+              <span [class]="item.icon"></span>
+              <span class="custom-margin">{{ item.label }}</span>
+            </a>
+          </ng-template>
+        </ng-container>
+      </ng-template>
+    </p-menubar>
   </div>
  
   <app-spinner></app-spinner>
