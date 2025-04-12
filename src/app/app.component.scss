@@ -45,3 +45,24 @@
   }
 }
 
+a.p-menuitem-link[href] {
+  /* Anula los estilos de PrimeNG */
+  background: none !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  padding: 0 !important;
+  /* Agrega otros estilos según necesites */
+}
+
+.custom-margin {
+  margin-left: 5px; /* Ajusta el valor según prefieras */
+}
+
+.p-menuitem-link {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.p-menuitem-link:hover {
+  cursor:pointer;
+}
