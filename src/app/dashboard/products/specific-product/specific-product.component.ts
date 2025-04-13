@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Product } from '../../../interfaces/interfaces';
+import { Product, SpecificShoe } from '../../../interfaces/interfaces';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -38,7 +38,9 @@ export class SpecificProductComponent implements OnInit{
   responsiveOptions: any[] | undefined;
   ePayco: any;
   token: any = null
-  color: string | undefined;
+  selectedColor: string | null = null;
+  sizes: number[] = Array.from({ length: 15 }, (_, i) => 34 + i); // [34, 35, ..., 48]
+  selectedSize: number | null = null;
   
   //INTERFACES
   product: Product = {
@@ -64,6 +66,37 @@ export class SpecificProductComponent implements OnInit{
         image: "",
       }]
   }
+
+  selectColor(color: string) {
+    this.selectedColor = color;
+  }
+
+  selectSize(size: number) {
+    if (this.isSizeAvailable(size)) {
+      this.selectedSize = size;
+    }
+  }
+
+  isSizeAvailable(size: number): boolean {
+    if (!this.selectedColor) {
+      return false; // No sizes available if no color is selected
+    }
+    const shoe = this.product.shoes.find(
+      (shoe: any) => shoe.color === this.selectedColor && shoe.size === size
+    );
+    return !!shoe && shoe.stock > 0; // Convert to boolean explicitly
+  }
+
+  getDisplayedImage(): string {
+    if (!this.selectedColor) {
+      return this.product.image; // Show general image when no color is selected
+    }
+    const selectedShoe = this.product.shoes.find(
+      (shoe: SpecificShoe) => shoe.color === this.selectedColor
+    );
+    return selectedShoe?.image || this.product.image; // Fallback to general image if no specific image
+  }
+
 
   volver(){
     this.router.navigate([`/products/${this.brand}/${this.gender}`])
