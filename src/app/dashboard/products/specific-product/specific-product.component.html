@@ -5,45 +5,49 @@
 </div>
 
 <div class="product-container">
-<div class="product">
-  <div class="image">
-    <img [src]="getDisplayedImage()" alt="{{product.name}}" />
-  </div>
-  <div class="filters">
-    <p>{{product.type}}</p>
-    <p style="font-weight: bold; font-size: 2rem;">{{product.name}}</p>
-    <p style="font-weight: bold;">{{product.price | currency: 'USD'}}</p>
-    <p>Color</p>
-    <div style="display: flex; flex-direction: row; gap: 10px;">
-      @for (shoe of product.shoes; track shoe._id) {
-        <div 
-          style="width: 20px; height: 20px; cursor: pointer; border: 2px solid transparent;" 
-          [style.background-color]="shoe.color"
-          [style.border-color]="selectedColor === shoe.color ? 'black' : 'transparent'"
-          (click)="selectColor(shoe.color)">
+  <div class="product">
+    <div class="product-left">
+      <div class="image">
+        <img [src]="getDisplayedImage()" alt="{{product.name}}" />
+      </div>
+    </div>
+    <div class="product-right">
+      <div class="filters">
+        <p>{{product.type}}</p>
+        <p class="name">{{product.name}}</p>
+        <p class="price">{{product.price | currency: 'USD'}}</p>
+        <p>Variaciones</p>
+        <div class="colors">
+          @for (shoe of product.shoes; track shoe._id) {
+            <img
+              [src]="shoe.image"
+              alt="Variación de zapatilla"
+              class="color-option"
+              [class.selected]="selectedShoeId === shoe._id"
+              (click)="selectShoe(shoe._id)"
+            />
+          }
         </div>
-      }
-    </div>
-    <p>Talles</p>
-    <div class="talles">
-      @if (selectedColor) {
-        @for (size of sizes; track size) {
-          <div 
-  style="width: 40px; height: 40px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; margin: 5px;"
-  [style.text-decoration]="isSizeAvailable(size) ? 'none' : 'line-through'"
-  [style.opacity]="isSizeAvailable(size) ? '1' : '0.5'"
-  [style.cursor]="isSizeAvailable(size) ? 'pointer' : 'default'"
-  [style.background-color]="selectedSize === size ? '#e0e0e0' : ''"
-  (click)="selectSize(size)">
-  {{size}}
-</div>
-        }
-      } @else {
-        <p>Selecciona un color para ver los talles disponibles</p>
-      }
+        <p>Talles</p>
+        <div class="talles">
+          @if (selectedShoeId) {
+            @for (size of sizes; track size) {
+              <div
+                class="size-option"
+                [class.unavailable]="!isSizeAvailable(size)"
+                [class.selected]="selectedSize === size"
+                (click)="selectSize(size)"
+              >
+                {{size}}
+              </div>
+            }
+          } @else {
+            <p>Selecciona una variación para ver los talles disponibles</p>
+          }
+        </div>
+      </div>
     </div>
   </div>
-</div>
 </div>
 
    <div class="mini-cart" *ngIf="productoSeleccionado" [class.open]="carritoAbierto">

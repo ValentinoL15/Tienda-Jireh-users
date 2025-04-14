@@ -14,13 +14,13 @@ import { ColorPicker } from 'primeng/colorpicker';
 
 @Component({
   selector: 'app-specific-product',
-  imports: [CarouselModule, ButtonModule, TagModule, CommonModule,ReactiveFormsModule,FormsModule],
+  imports: [CarouselModule, ButtonModule, TagModule, CommonModule, ReactiveFormsModule, FormsModule],
   standalone: true,
   templateUrl: './specific-product.component.html',
   styleUrl: './specific-product.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SpecificProductComponent implements OnInit{
+export class SpecificProductComponent implements OnInit {
 
   //INJECTIONS
   private productServ = inject(ProductsService)
@@ -38,67 +38,94 @@ export class SpecificProductComponent implements OnInit{
   responsiveOptions: any[] | undefined;
   ePayco: any;
   token: any = null
-  selectedColor: string | null = null;
+  selectedShoeId: string | null = null;
   sizes: number[] = Array.from({ length: 15 }, (_, i) => 34 + i); // [34, 35, ..., 48]
   selectedSize: number | null = null;
-  
+
   //INTERFACES
   product: Product = {
+    _id: "",
+    reference_id: "",
+    name: "",
+    gender: [],
+    material: "",
+    price: 0,
+    original_price: 0,
+    discount: false,
+    discount_percentage: 0,
+    type: [],
+    brand: [],
+    image: "",
+    shoes: [{
       _id: "",
-      reference_id: "",
-      name: "",
-      gender: [],
-      material: "",
-      price: 0,
-      original_price: 0,
-      discount: false,
-      discount_percentage: 0,
-      type: [],
-      brand: [],
+      shoe_id: "",
+      talle_34: 0,
+      talle_35: 0,
+      talle_36: 0,
+      talle_37: 0,
+      talle_38: 0,
+      talle_39: 0,
+      talle_40: 0,
+      talle_41: 0,
+      talle_42: 0,
+      talle_43: 0,
+      talle_44: 0,
+      sales: 0,
       image: "",
-      shoes: [{
-        _id: "",
-        shoe_id: "",
-        size: 0,
-        stock: 0,
-        color: "",
-        sales: 0,
-        image: "",
-      }]
+    }]
   }
 
-  selectColor(color: string) {
-    this.selectedColor = color;
+  selectShoe(shoeId: any) {
+    this.selectedShoeId = shoeId;
+    this.selectedSize = null; // Resetear talle seleccionado al cambiar de zapatilla
+    this.cd.markForCheck();
   }
 
   selectSize(size: number) {
     if (this.isSizeAvailable(size)) {
       this.selectedSize = size;
+      this.cd.markForCheck();
     }
   }
 
   isSizeAvailable(size: number): boolean {
-    if (!this.selectedColor) {
-      return false; // No sizes available if no color is selected
+    if (!this.selectedShoeId) {
+      return false; // No hay talles disponibles si no se seleccionó una zapatilla
     }
     const shoe = this.product.shoes.find(
-      (shoe: any) => shoe.color === this.selectedColor && shoe.size === size
+      (shoe: SpecificShoe) => shoe._id === this.selectedShoeId
     );
-    return !!shoe && shoe.stock > 0; // Convert to boolean explicitly
+    if (!shoe) {
+      return false;
+    }
+    const talleKey = `talle_${size}` as keyof Pick<
+      SpecificShoe,
+      | 'talle_34'
+      | 'talle_35'
+      | 'talle_36'
+      | 'talle_37'
+      | 'talle_38'
+      | 'talle_39'
+      | 'talle_40'
+      | 'talle_41'
+      | 'talle_42'
+      | 'talle_43'
+      | 'talle_44'
+    >;
+    return shoe[talleKey] !== undefined && shoe[talleKey] > 0;
   }
 
   getDisplayedImage(): string {
-    if (!this.selectedColor) {
-      return this.product.image; // Show general image when no color is selected
+    if (!this.selectedShoeId) {
+      return this.product.image; // Mostrar imagen general si no hay zapatilla seleccionada
     }
     const selectedShoe = this.product.shoes.find(
-      (shoe: SpecificShoe) => shoe.color === this.selectedColor
+      (shoe: SpecificShoe) => shoe._id === this.selectedShoeId
     );
-    return selectedShoe?.image || this.product.image; // Fallback to general image if no specific image
+    return selectedShoe?.image || this.product.image; // Fallback a imagen general
   }
 
-
-  volver(){
+  volver() {
     this.router.navigate([`/products/${this.brand}/${this.gender}`])
   }
 
@@ -111,49 +138,49 @@ export class SpecificProductComponent implements OnInit{
     })
     this.responsiveOptions = [
       {
-          breakpoint: '1400px',
-          numVisible: 2,
-          numScroll: 1
+        breakpoint: '1400px',
+        numVisible: 2,
+        numScroll: 1
       },
       {
-          breakpoint: '1199px',
-          numVisible: 3,
-          numScroll: 1
+        breakpoint: '1199px',
+        numVisible: 3,
+        numScroll: 1
       },
       {
-          breakpoint: '767px',
-          numVisible: 2,
-          numScroll: 1
+        breakpoint: '767px',
+        numVisible: 2,
+        numScroll: 1
       },
       {
-          breakpoint: '575px',
-          numVisible: 1,
-          numScroll: 1
+        breakpoint: '575px',
+        numVisible: 1,
+        numScroll: 1
       }
-  ]
-  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-    const existingScript = document.querySelector('script[src="https://checkout.epayco.co/checkout.js"]');
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.epayco.co/checkout.js';
-      script.async = true;
-      script.onload = () => {
-        console.log('✅ Script de ePayco cargado correctamente');
-      };
-      script.onerror = () => {
-        console.error('❌ No se pudo cargar el script de ePayco');
-      };
-      document.body.appendChild(script);
+    ]
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      const existingScript = document.querySelector('script[src="https://checkout.epayco.co/checkout.js"]');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.epayco.co/checkout.js';
+        script.async = true;
+        script.onload = () => {
+          console.log('✅ Script de ePayco cargado correctamente');
+        };
+        script.onerror = () => {
+          console.error('❌ No se pudo cargar el script de ePayco');
+        };
+        document.body.appendChild(script);
+      }
     }
   }
-  }
 
-  getProduct(){
+  getProduct() {
     this.productServ.getProductById(this.id).subscribe({
-      next: (res : any) => {
+      next: (res: any) => {
         console.log('✅ Producto recibido:', res);
         this.product = res.product;
-        this.cd.markForCheck(); 
+        this.cd.markForCheck();
       },
       error: (err: any) => {
         console.log(err)
@@ -166,7 +193,7 @@ export class SpecificProductComponent implements OnInit{
       key: 'ae23dca89bab1bd8a75d3e66cbac05be',
       test: true
     });
-  
+
     const data = {
       name: 'Compra de zapatos',
       description: 'Pago en ecommerce',
@@ -179,114 +206,114 @@ export class SpecificProductComponent implements OnInit{
       response: 'https://tienda-jireh-users.vercel.app/payment-response',
       confirmation: 'https://tienda-jireh-service-production.up.railway.app/webhook'
     };
-  
+
     handler.open(data);
   }
 
-/****************************************************CARRITO*************************************/
+  /****************************************************CARRITO*************************************/
 
-productoSeleccionado: any = null;
-carritoAbierto = false;
-cantidad = 1;
+  productoSeleccionado: any = null;
+  carritoAbierto = false;
+  cantidad = 1;
 
-agregarAlCarrito(shoe: any) {
-  const token = this.authService.getToken();
-  if (!token) {
-    this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!');
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
-    return;
-  }
-
-  const item = {
-    product: shoe,
-    quantity: this.cantidad,
-    price: this.product.price,
-    parentProduct: this.product
-  };
-
-  this.cartService.addItem(item);
-  this.toastr.success('Producto agregado al carrito!');
-  setTimeout(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, 100);
-}
-
-
-cerrarCarrito() {
-  this.carritoAbierto = false;
-  this.productoSeleccionado = null;
-}
-
-get cartItems() {
-  if (!this.productoSeleccionado) return [];
-  console.log(this.productoSeleccionado)
-  return [{
-    _id: this.product._id,
-    name: this.product.name,
-    quantity: this.cantidad,
-    image: this.productoSeleccionado.image,
-    price: this.product.price,
-    size: this.productoSeleccionado.size,
-    color: this.productoSeleccionado.color,
-    shoeId: this.productoSeleccionado.shoe_id
-  }];
-}
-
-getTotal(): number {
-  return this.cartItems.reduce((total, item) => {
-    return total + item.price * item.quantity;
-  }, 0);
-}
-
-pagarAhora() {
-  if (!(window as any).ePayco) {
-    this.toastr.error('ePayco no se ha cargado correctamente. Intentá de nuevo.');
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
-    return;
-  }
-
-  const payload = {
-    user: '67eea38555dc88f17442759b',
-    orderItems: {
-      product: this.productoSeleccionado._id,
-      quantity: this.cantidad,
-      price: this.getTotal()
-    },
-    paymentMethod: 'epayco',
-    totalAmount: this.getTotal()
-  };
-
-  this.productServ.createPaymentOrder(payload).subscribe({
-    next: (res: any) => {
-      const handler = (window as any).ePayco.checkout.configure({
-        key: 'ae23dca89bab1bd8a75d3e66cbac05be',
-        test: true
-      });
-
-      const data = {
-        name: res.name,
-        description: res.description,
-        invoice: res.invoice,
-        currency: res.currency,
-        amount: res.amount,
-        country: res.country,
-        lang: 'es',
-        external: true,
-        response: res.response,
-        confirmation: res.confirmation
-      };
-
-      handler.open(data);
-    },
-    error: (err: any) => {
-      console.error('Error creando pago', err);
+  agregarAlCarrito(shoe: any) {
+    const token = this.authService.getToken();
+    if (!token) {
+      this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+      return;
     }
-  });
-}
+
+    const item = {
+      product: shoe,
+      quantity: this.cantidad,
+      price: this.product.price,
+      parentProduct: this.product
+    };
+
+    this.cartService.addItem(item);
+    this.toastr.success('Producto agregado al carrito!');
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  }
+
+
+  cerrarCarrito() {
+    this.carritoAbierto = false;
+    this.productoSeleccionado = null;
+  }
+
+  get cartItems() {
+    if (!this.productoSeleccionado) return [];
+    console.log(this.productoSeleccionado)
+    return [{
+      _id: this.product._id,
+      name: this.product.name,
+      quantity: this.cantidad,
+      image: this.productoSeleccionado.image,
+      price: this.product.price,
+      size: this.productoSeleccionado.size,
+      color: this.productoSeleccionado.color,
+      shoeId: this.productoSeleccionado.shoe_id
+    }];
+  }
+
+  getTotal(): number {
+    return this.cartItems.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+  }
+
+  pagarAhora() {
+    if (!(window as any).ePayco) {
+      this.toastr.error('ePayco no se ha cargado correctamente. Intentá de nuevo.');
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+      return;
+    }
+
+    const payload = {
+      user: '67eea38555dc88f17442759b',
+      orderItems: {
+        product: this.productoSeleccionado._id,
+        quantity: this.cantidad,
+        price: this.getTotal()
+      },
+      paymentMethod: 'epayco',
+      totalAmount: this.getTotal()
+    };
+
+    this.productServ.createPaymentOrder(payload).subscribe({
+      next: (res: any) => {
+        const handler = (window as any).ePayco.checkout.configure({
+          key: 'ae23dca89bab1bd8a75d3e66cbac05be',
+          test: true
+        });
+
+        const data = {
+          name: res.name,
+          description: res.description,
+          invoice: res.invoice,
+          currency: res.currency,
+          amount: res.amount,
+          country: res.country,
+          lang: 'es',
+          external: true,
+          response: res.response,
+          confirmation: res.confirmation
+        };
+
+        handler.open(data);
+      },
+      error: (err: any) => {
+        console.error('Error creando pago', err);
+      }
+    });
+  }
 
 
 }

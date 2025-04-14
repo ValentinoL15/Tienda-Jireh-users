@@ -27,9 +27,7 @@ export class CartService {
   addItem(item: CartItem) {
     const items = [...this.cartItems()];
     const existing = items.find(i =>
-      i.product._id === item.product._id &&
-      i.product.size === item.product.size &&
-      i.product.color === item.product.color
+      i.product._id === item.product._id 
     );
   
     if (existing) {
