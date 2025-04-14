@@ -26,7 +26,7 @@ import { ButtonModule } from "primeng/button";
           <img [src]="item.product.image" />
           <div>
             <strong>{{ item.parentProduct?.name || 'Producto' }}</strong>
-            <p>Talla: {{ item.product.size }} | Color: {{ item.product.color }}</p>
+            <p>Talla: </p>
             <p>Cantidad: {{ item.quantity }}</p>
             <p>{{ item.price | currency:'COP' }}</p>
             <button (click)="remove(i)">Eliminar</button>
