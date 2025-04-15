@@ -8,7 +8,7 @@ export const routes: Routes = [
   { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
   { path: 'profile', loadComponent: () => import('./auth/profile/profile.component').then(m => m.ProfileComponent) },
   { path: 'payment-response', component: PaymentResponseComponent },
-  { path: 'my-orders', loadComponent: () => import('./dashboard/my-orders/my-orders.component').then((m) => m.MyOrdersComponent) },
+  { path: 'my-o rders', loadComponent: () => import('./dashboard/my-orders/my-orders.component').then((m) => m.MyOrdersComponent) },
   // Redirección por defecto
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 

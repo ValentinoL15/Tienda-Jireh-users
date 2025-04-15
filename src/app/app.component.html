@@ -1,28 +1,26 @@
 
 <div class="container">
   <app-header></app-header>
-  <div >
+  <div>
     <p-menubar [model]="items">
-      <ng-template #item let-item>
-        <ng-container *ngIf="item.items">
+      <ng-template pTemplate="item" let-item>
+        <ng-container *ngIf="item.route">
+          <a [routerLink]="item.routerLink" class="p-menuitem-link" routerLinkActive="p-menuitem-link-active">
+            <span [class]="item.icon"></span>
+            <span class="custom-margin">{{ item.label }}</span>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="item.url && !item.route">
+          <a [href]="item.url" class="p-menuitem-link">
+            <span [class]="item.icon"></span>
+            <span class="custom-margin">{{ item.label }}</span>
+          </a>
+        </ng-container>
+        <ng-container *ngIf="!item.route && !item.url">
           <span class="p-menuitem-link">
             <span [class]="item.icon"></span>
             <span class="custom-margin">{{ item.label }}</span>
           </span>
-        </ng-container>
-        <ng-container *ngIf="!item.items">
-          <ng-container *ngIf="item.route; else elseBlock">
-            <a [routerLink]="item.route" class="p-menuitem-link">
-              <span [class]="item.icon"></span>
-              <span class="custom-margin">{{ item.label }}</span>
-            </a>
-          </ng-container>
-          <ng-template #elseBlock>
-            <a [href]="item.url" class="p-menuitem-link">
-              <span [class]="item.icon"></span>
-              <span class="custom-margin">{{ item.label }}</span>
-            </a>
-          </ng-template>
         </ng-container>
       </ng-template>
     </p-menubar>
