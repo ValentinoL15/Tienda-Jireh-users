@@ -1,6 +1,28 @@
 <section class="container">
 
-<div class="contenedor">
+  <div style="margin-top: 20px">
+    <p-carousel [value]="filteredProducts" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+      <ng-template let-product #item>
+          <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
+              <div class="mb-4">
+                  <div class="relative mx-auto">
+                      <img [src]="product.image" [alt]="product.name" class="product-image"/>
+                  </div>
+              </div>
+              <div class="mb-4 font-medium">{{ product.name }}</div>
+              <div class="flex justify-between items-center">
+                  <div style="font-weight: bold;" class="mt-0 text-xl font-bold">{{ '$' + product.price }}</div>
+                  <span>
+                      
+                      <p-button icon="pi pi pi-eye" styleClass="ml-2" [routerLink]="[`/products/${product.brand}/${product.gender}/${product._id}`]" routerLinkActive="router-link-active" />
+                  </span>
+              </div>
+          </div>
+      </ng-template>
+  </p-carousel>
+  </div>
+
+<!--<div class="contenedor">
   @for(product of filteredProducts; track product.reference_id) {
     <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
         <div class="mb-4">
@@ -22,4 +44,4 @@
 <div class="card flex justify-center">
   <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="limit" [totalRecords]="totalRecords"
           [rowsPerPageOptions]="[4, 8, 12]" />
-</div>
+</div>-->

@@ -31,15 +31,14 @@
 .product-image {
   width: 100%;
   aspect-ratio: 1 / 1; // Mantiene todas las imágenes cuadradas
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 10px;
   height: 250px; // Permite que la altura se ajuste automáticamente
 }
 
-
-
-.card {
-  margin-top: 20px;
+.tag-position {
+  left: 5px;
+  top: 5px;
 }
 
 // Ajuste para pantallas más pequeñas
@@ -48,12 +47,20 @@
     max-width: 200px; // Reduce el tamaño en tablets
     max-height: 200px;
   }
+  .relative{
+    display: flex;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 480px) {
   .product-image {
     max-width: 150px; // Reduce aún más en teléfonos
     max-height: 150px;
+  }
+  .relative{
+    display: flex;
+    justify-content: center;
   }
 }
 
