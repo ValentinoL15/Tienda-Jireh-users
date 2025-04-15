@@ -31,6 +31,7 @@ export class RegisterComponent implements OnInit{
       city: ['', Validators.required],
       address: ['', Validators.required],
       numberAddress: ['',Validators.required],
+      isMayorista: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', Validators.required],
       confirm_password: ['', Validators.required],
@@ -89,6 +90,7 @@ registro(){
     city: this.form.get('city')?.value?.name || this.form.get('city')?.value,
     address: this.form.get('address')?.value,
     numberAddress: this.form.get('numberAddress')?.value,
+    isMayorista: this.form.get('isMayorista')?.value,
     email: this.form.get('email')?.value,
     password: this.form.get('password')?.value,
   }
