@@ -76,8 +76,16 @@
     </label>
 
     <label>
-      <input required="true" placeholder="Colocar 'Si' solo si eres mayorista" class="input" formControlName="isMayorista" name="isMayorista">
-      <span>Usuario Mayorista</span>
+      <p-dropdown 
+      [options]="mayorista" 
+      optionLabel="isMayorista" 
+      optionValue="value"
+      placeholder="Selecciona 'Si' si eres mayorista" 
+      formControlName="isMayorista"
+      [showClear]="true"
+      [style]="{'width':'100%'}"
+      name="isMayorista">
+    </p-dropdown>
     </label>
   
     <label>

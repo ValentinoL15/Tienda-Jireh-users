@@ -39,12 +39,23 @@ export class RegisterComponent implements OnInit{
   }
 
 cities: any[] = [];
+private citiesCache: any[] | null = null;
 genders: any[] = [
   {
     gender: "Hombre"
   },
   {
     gender: "Mujer"
+  }
+]
+mayorista: any[] = [
+  {
+    isMayorista: "Si",
+    value: true
+  },
+  {
+    isMayorista: "No",
+    value: false
   }
 ]
 selectedCity: any = null;
@@ -57,13 +68,18 @@ ngOnInit(): void {
 }
 
 loadCities() {
+  if (this.citiesCache) {
+    this.cities = this.citiesCache;
+    return;
+  }
   this.productService.getCities().subscribe({
     next: (data) => {
       this.cities = data;
+      this.citiesCache = data; // Guardar en caché
     },
     error: (err) => {
       console.error('Error al cargar ciudades:', err);
-      this.toastr.error("Error al cargar ciudades de Colombia")
+      this.toastr.error("Error al cargar ciudades de Colombia");
     }
   });
 }

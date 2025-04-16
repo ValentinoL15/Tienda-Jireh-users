@@ -100,14 +100,14 @@ export class AppComponent implements OnInit {
       routerLink: '/products',
     },
     {
-      label: 'Más Populares',
-      icon: 'pi pi-circle-on',
-      routerLink: '/popular',
-    },
-    {
       label: 'Más Vendidos',
       icon: 'pi pi-star',
       routerLink: '/bestsellers',
+    },
+    {
+      label: 'Ofertas',
+      icon: 'pi pi-percentage',
+      routerLink: '/popular',
     },
     {
       label: 'Contacto',
