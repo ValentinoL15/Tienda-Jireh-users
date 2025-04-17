@@ -55,7 +55,8 @@ export class MyOrdersComponent implements OnInit{
             image: "",
           },
           quantity: 0,
-          price: 0
+          price: 0,
+          selectedSize: 0
         }],
         paymentMethod: "",
         totalAmount: 0,

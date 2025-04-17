@@ -4,6 +4,7 @@ import { Product, SpecificShoe } from '@app/interfaces/interfaces';
 
 export interface CartItem {
   product: SpecificShoe;
+  selectedSize: number;
   quantity: number;
   price: number;
   parentProduct?: Product; // para acceder al nombre, imagen, etc.
@@ -26,17 +27,20 @@ export class CartService {
 
   addItem(item: CartItem) {
     const items = [...this.cartItems()];
+    // Buscar un ítem existente por product._id Y selectedSize
     const existing = items.find(i =>
-      i.product._id === item.product._id 
+      i.product._id === item.product._id && i.selectedSize === item.selectedSize
     );
   
     if (existing) {
+      // Si existe, aplicar la restricción de máximo 2 unidades
       if (existing.quantity + item.quantity > 2) {
-        existing.quantity = 2; // lo dejamos en el máximo
+        existing.quantity = 2; // Máximo 2 unidades para este talle
       } else {
         existing.quantity += item.quantity;
       }
     } else {
+      // Si no existe, agregar como nuevo ítem (respetando el límite de 2)
       if (item.quantity > 2) item.quantity = 2;
       items.push(item);
     }
@@ -57,6 +61,15 @@ export class CartService {
     this.cartItems.set([]);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('cart');
+    }
+  }
+
+  updateItem(index: number, updatedItem: CartItem) {
+    const items = [...this.cartItems()];
+    if (index >= 0 && index < items.length) {
+      items[index] = updatedItem;
+      this.cartItems.set(items);
+      this.save();
     }
   }
 

@@ -14,6 +14,13 @@ export interface Product {
   shoes: SpecificShoe[]
 }
 
+export interface CartItem {
+  product: SpecificShoe;
+  selectedSize: number;
+  quantity: number;
+  price: number;
+  parentProduct?: Product;
+}
 
 export interface SpecificShoe {
   _id?: string,
@@ -54,7 +61,8 @@ export interface User {
     orderItems: [{
       product: SpecificShoe,
       quantity: number,
-      price: number
+      price: number,
+      selectedSize: number  // 👈 nuevo campo
     }],
     paymentMethod: string,
     totalAmount: number,

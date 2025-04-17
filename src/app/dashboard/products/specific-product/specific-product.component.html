@@ -45,6 +45,14 @@
             <p>Selecciona una variación para ver los talles disponibles</p>
           }
         </div>
+        <div class="add-to-cart" *ngIf="selectedSize">
+          <p-button
+            (onClick)="agregarAlCarrito(selectedShoeId)"
+            label="Agregar al carrito"
+            icon="pi pi-shopping-cart"
+            severity="success"
+          ></p-button>
+        </div>
       </div>
     </div>
   </div>
@@ -75,7 +83,7 @@
   
       <p class="total">Total: <strong>{{ product.price * cantidad | currency:"USD" }}</strong></p>
   
-      <button class="pagar-btn" (click)="pagarAhora()">Pagar con ePayco</button>
+      <button class="pagar-btn">Pagar</button>
     </div>
   </div>
  
