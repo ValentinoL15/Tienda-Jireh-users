@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '@app/auth/services/auth.service';
-import { CartService } from '@app/dashboard/services/cart.service';
+import { CartItem, CartService } from '@app/dashboard/services/cart.service';
 import { ColorPicker } from 'primeng/colorpicker';
 
 @Component({
@@ -158,21 +158,6 @@ export class SpecificProductComponent implements OnInit {
         numScroll: 1
       }
     ]
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-      const existingScript = document.querySelector('script[src="https://checkout.epayco.co/checkout.js"]');
-      if (!existingScript) {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.epayco.co/checkout.js';
-        script.async = true;
-        script.onload = () => {
-          console.log('✅ Script de ePayco cargado correctamente');
-        };
-        script.onerror = () => {
-          console.error('❌ No se pudo cargar el script de ePayco');
-        };
-        document.body.appendChild(script);
-      }
-    }
   }
 
   getProduct() {
@@ -188,35 +173,13 @@ export class SpecificProductComponent implements OnInit {
     })
   }
 
-  openEpaycoCheckout(): void {
-    const handler = (window as any).ePayco.checkout.configure({
-      key: 'ae23dca89bab1bd8a75d3e66cbac05be',
-      test: true
-    });
-
-    const data = {
-      name: 'Compra de zapatos',
-      description: 'Pago en ecommerce',
-      invoice: 'ID_ORDEN_GENERADA',
-      currency: 'COP',
-      amount: '10000',
-      country: 'CO',
-      lang: 'es',
-      external: false,
-      response: 'https://tienda-jireh-users.vercel.app/payment-response',
-      confirmation: 'https://tienda-jireh-service-production.up.railway.app/webhook'
-    };
-
-    handler.open(data);
-  }
-
   /****************************************************CARRITO*************************************/
 
   productoSeleccionado: any = null;
   carritoAbierto = false;
   cantidad = 1;
 
-  agregarAlCarrito(shoe: any) {
+  agregarAlCarrito(shoeId: any) {
     const token = this.authService.getToken();
     if (!token) {
       this.toastr.error('Para comprar debes iniciar sesión o crearte una cuenta!');
@@ -225,14 +188,39 @@ export class SpecificProductComponent implements OnInit {
       }, 100);
       return;
     }
-
-    const item = {
-      product: shoe,
+  
+    if (!this.selectedSize) {
+      this.toastr.warning('Por favor selecciona un talle.');
+      return;
+    }
+  
+    if (!shoeId) {
+      this.toastr.warning('Por favor selecciona una variación.');
+      return;
+    }
+  
+    const selectedShoe = this.product.shoes.find(s => s._id === shoeId);
+    if (!selectedShoe) {
+      this.toastr.error('Error: No se encontró la zapatilla seleccionada.');
+      return;
+    }
+  
+    this.productoSeleccionado = {
+      ...selectedShoe,
+      size: this.selectedSize, // 👈 Asegúrate de que este campo esté presente
+      color: selectedShoe.shoe_id // o cualquier propiedad que represente el color
+    };
+  
+    this.carritoAbierto = true;
+  
+    const item: CartItem = {
+      product: selectedShoe, // La zapatilla específica
       quantity: this.cantidad,
       price: this.product.price,
+      selectedSize: this.selectedSize, // 👈 Incluir el talle seleccionado
       parentProduct: this.product
     };
-
+  
     this.cartService.addItem(item);
     this.toastr.success('Producto agregado al carrito!');
     setTimeout(() => {
@@ -267,53 +255,6 @@ export class SpecificProductComponent implements OnInit {
     }, 0);
   }
 
-  pagarAhora() {
-    if (!(window as any).ePayco) {
-      this.toastr.error('ePayco no se ha cargado correctamente. Intentá de nuevo.');
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
-      return;
-    }
-
-    const payload = {
-      user: '67eea38555dc88f17442759b',
-      orderItems: {
-        product: this.productoSeleccionado._id,
-        quantity: this.cantidad,
-        price: this.getTotal()
-      },
-      paymentMethod: 'epayco',
-      totalAmount: this.getTotal()
-    };
-
-    this.productServ.createPaymentOrder(payload).subscribe({
-      next: (res: any) => {
-        const handler = (window as any).ePayco.checkout.configure({
-          key: 'ae23dca89bab1bd8a75d3e66cbac05be',
-          test: true
-        });
-
-        const data = {
-          name: res.name,
-          description: res.description,
-          invoice: res.invoice,
-          currency: res.currency,
-          amount: res.amount,
-          country: res.country,
-          lang: 'es',
-          external: true,
-          response: res.response,
-          confirmation: res.confirmation
-        };
-
-        handler.open(data);
-      },
-      error: (err: any) => {
-        console.error('Error creando pago', err);
-      }
-    });
-  }
-
+  
 
 }

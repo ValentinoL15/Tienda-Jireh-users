@@ -26,8 +26,12 @@ import { ButtonModule } from "primeng/button";
           <img [src]="item.product.image" />
           <div>
             <strong>{{ item.parentProduct?.name || 'Producto' }}</strong>
-            <p>Talla: </p>
-            <p>Cantidad: {{ item.quantity }}</p>
+            <p>Talla: {{item.selectedSize}}</p>
+            <div class="quantity-control">
+          <button (click)="decrementQuantity(i)" [disabled]="item.quantity <= 1">-</button>
+          <p>Cantidad: {{ item.quantity }}</p>
+          <button (click)="incrementQuantity(i)" [disabled]="item.quantity >= 2">+</button>
+        </div>
             <p>{{ item.price | currency:'COP' }}</p>
             <button (click)="remove(i)">Eliminar</button>
           </div>
@@ -35,7 +39,7 @@ import { ButtonModule } from "primeng/button";
 
         <div class="cart-actions">
           <strong>Total: {{ total() | currency:'COP' }}</strong>
-          <button (click)="pagarTodoElCarrito()">Pagar</button>
+          <button>Pagar</button>
           <button (click)="clear()">Vaciar carrito</button>
         </div>
       </div>
@@ -54,6 +58,38 @@ import { ButtonModule } from "primeng/button";
   height: 100vh;
   background: rgba(0, 0, 0, 0.4);
   z-index: 9998;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px 0;
+}
+
+.quantity-control button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-control button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.quantity-control p {
+  margin: 0;
+  font-size: 1rem;
 }
 
 .closes-btn {
@@ -178,6 +214,34 @@ export class CartPreviewComponent implements OnInit{
     this.open.set(false);
   }
 
+  // Nuevo método para incrementar la cantidad
+  incrementQuantity(index: number) {
+    const items = [...this.cartItems()];
+    const item = items[index];
+
+    if (item.quantity < 2) {
+      item.quantity += 1;
+      this.cartService.updateItem(index, item);
+      this.toastr.success('Cantidad actualizada');
+    } else {
+      this.toastr.warning('No puedes agregar más de 2 unidades de este talle.');
+    }
+  }
+
+  // Nuevo método para decrementar la cantidad
+  decrementQuantity(index: number) {
+    const items = [...this.cartItems()];
+    const item = items[index];
+
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+      this.cartService.updateItem(index, item);
+      this.toastr.success('Cantidad actualizada');
+    } else {
+      this.toastr.warning('La cantidad mínima es 1. Usa "Eliminar" para quitar el producto.');
+    }
+  }
+
   total() {
     return this.cartService.getTotal();
   }
@@ -190,52 +254,6 @@ export class CartPreviewComponent implements OnInit{
     this.getToken()
   }
 
-  pagarTodoElCarrito() {
-    const cartItems = this.cartItems();
-    if (cartItems.length === 0) return;
   
-    const payload = {
-      user: localStorage.getItem('st_1892@121'), // o desde tu auth
-      orderItems: cartItems.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      paymentMethod: 'ePayco', // o el método que manejes
-      totalAmount: this.total()
-    };
-
-    const userId = localStorage.getItem('st_1892@121'); // adaptá según manejes el auth
-    if (!userId) return alert('Usuario no identificado');
-  
-    this.productServ.createPaymentOrder(payload).subscribe({
-      next: (res: any) => {
-        const handler = (window as any).ePayco.checkout.configure({
-          key: 'ae23dca89bab1bd8a75d3e66cbac05be',
-          test: true
-        });
-  
-        const data = {
-          name: res.name,
-          description: res.description,
-          invoice: res.invoice,
-          currency: res.currency,
-          amount: res.amount,
-          country: res.country,
-          lang: 'es',
-          external: 'true', 
-          response: res.response,
-          confirmation: res.confirmation
-        };
-  
-        handler.open(data);
-        this.open.set(false);
-      },
-      error: (err: any) => {
-        console.error('Error creando orden de pago', err);
-        this.toastr.error(err.error.message)
-      }
-    });
-  }
 }
 
