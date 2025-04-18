@@ -280,6 +280,12 @@ export class CartPreviewComponent implements OnInit {
       return;
     }
 
-    this.router.navigate(['/checkout']);
+    this.open.set(false);
+    this.router.navigate(['/checkout']).then(success => {
+      if (!success) {
+        console.error('Error al navegar a /checkout');
+        this.toastr.error('Error al navegar al checkout');
+      }
+    });
   }
 }

@@ -104,7 +104,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private cartService = inject(CartService);
   private productServ = inject(ProductsService);
   private toastr = inject(ToastrService);
-  private router = inject(Router)
+  private router = inject(Router);
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   cartItems = this.cartService.getItems();
@@ -117,12 +117,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Destruir el formulario embebido al salir del componente
     if (this.checkout) {
       this.checkout.destroy();
       this.checkout = null;
     }
-    // Limpiar el contenedor
     const container = document.querySelector('#checkout-container');
     if (container) {
       container.innerHTML = '';
@@ -146,7 +144,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
 
     try {
-      // Limpiar cualquier formulario existente
       if (this.checkout) {
         this.checkout.destroy();
         this.checkout = null;
@@ -156,7 +153,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         container.innerHTML = '';
       }
 
-      // Preparar los datos para create_payment
       const orderItems = this.cartItems().map(item => ({
         product: item.product._id,
         quantity: item.quantity,
@@ -166,7 +162,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       const user = { id: this.authService.getToken() };
 
-      // Llamar al endpoint create_payment
       const response = await firstValueFrom(
         this.productServ.createPaymentOrder({
           user,
@@ -178,27 +173,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       const { clientSecret } = response;
 
-      // Cargar Stripe.js
       const stripe = await this.stripePromise;
       if (!stripe) {
         throw new Error('No se pudo cargar Stripe.js');
       }
 
-      // Verificar que el contenedor existe
       const checkoutContainer = document.querySelector('#checkout-container');
       if (!checkoutContainer) {
         throw new Error('El contenedor #checkout-container no se encuentra en el DOM');
       }
 
-      // Renderizar el formulario de pago embebido
       this.checkout = await stripe.initEmbeddedCheckout({
-        clientSecret
+        clientSecret,
+        onComplete: () => {
+          this.handlePaymentSuccess();
+        }
       });
 
-      // Montar el formulario
       this.checkout.mount('#checkout-container');
       this.loading.set(false);
-    } catch (error:any) {
+    } catch (error: any) {
       this.loading.set(false);
       this.toastr.error('Error al iniciar el pago: ' + (error.message || 'Desconocido'));
       console.error('Error initiating payment:', error);
@@ -206,11 +200,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
   }
 
+  handlePaymentSuccess() {
+    this.cartService.clearCart();
+    this.toastr.success('Pago exitoso. Tu carrito ha sido vaciado.');
+    this.router.navigate(['/dashboard']);
+  }
+
   total() {
     return this.cartService.getTotal();
   }
 
   goBack() {
-    this.router.navigate(['/dashboard'])
+    this.router.navigate(['/dashboard']);
   }
 }
