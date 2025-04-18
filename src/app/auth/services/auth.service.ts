@@ -39,13 +39,17 @@ setToken(token: string): void {
 logIn(form: any) {
   return this.http.post(`${this.API_URL}/login`, form).pipe(
     tap((response: any) => {
+      console.log('Respuesta de login:', response);
       const token = response.token;
       if (token) {
         this.setToken(token);
+        console.log('Token guardado en localStorage:', localStorage.getItem(this.tokenKey));
+      } else {
+        console.warn('No se encontró token en la respuesta del login');
       }
     }),
     catchError((error) => {
-      // Propaga el error HTTP completo
+      console.error('Error en login:', error);
       return throwError(() => error);
     })
   );
