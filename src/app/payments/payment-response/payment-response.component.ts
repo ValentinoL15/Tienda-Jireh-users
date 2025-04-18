@@ -4,6 +4,7 @@ import { ProductsService } from '@app/dashboard/services/products.service';
 import { ToastrService } from 'ngx-toastr';
 import { MyComponent } from "../../spinner.component";
 import { NgIf } from '@angular/common';
+import { CartService } from '@app/dashboard/services/cart.service';
 
 @Component({
   selector: 'app-payment-response',
@@ -16,6 +17,7 @@ export class PaymentResponseComponent implements OnInit {
   paymentStatus: string = 'Verificando...';
   loading = true;
   private router = inject(Router)
+  private cartService = inject(CartService)
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +54,7 @@ export class PaymentResponseComponent implements OnInit {
             case 'paid':
               this.paymentStatus = '¡Pago exitoso!';
               this.toastr.success('Tu pago ha sido procesado correctamente');
+              this.cartService.clearCart(); // Limpiar el carrito
               // Redirigir a la página de éxito después de un breve retraso
               setTimeout(() => {
                 this.router.navigate(['/success']);
