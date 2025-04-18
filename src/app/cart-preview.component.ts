@@ -47,12 +47,13 @@ export const environment = {
         <div class="cart-actions">
           <strong>Total: {{ total() | currency:'COP' }}</strong>
           <p-button
-            label="Pagar"
-            severity="success"
-            [loading]="loading()"
-            (click)="pagar()"
-            [disabled]="loading() || cartItems().length === 0"
-          ></p-button>
+  label="Pagar"
+  severity="success"
+  [loading]="loading()"
+  (click)="pagar()"
+  (touchend)="pagar()"
+  [disabled]="loading() || cartItems().length === 0"
+></p-button>
           <p-button label="Vaciar carrito" severity="danger" (click)="clear()"></p-button>
         </div>
 
