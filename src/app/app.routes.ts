@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { PaymentResponseComponent } from './payments/payment-response/payment-response.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 export const routes: Routes = [
   { path: 'dashboard', loadComponent: () => import('./dashboard/home/home.component').then(m => m.HomeComponent) },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'products/:brand/:gender', loadComponent: () => import('./dashboard/products/products.component').then(m => m.ProductsComponent) },
   { path: 'products/:brand/:gender/:id', loadComponent: () => import('./dashboard/products/specific-product/specific-product.component').then(m => m.SpecificProductComponent) },
   { path: 'register', loadComponent: () => import('./auth/register/register.component').then(m => m.RegisterComponent) },
