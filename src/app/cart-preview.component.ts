@@ -7,6 +7,12 @@ import { ProductsService } from "./dashboard/services/products.service";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "./auth/services/auth.service";
 import { ButtonModule } from "primeng/button";
+import {loadStripe,Stripe} from '@stripe/stripe-js';
+
+export const environment = {
+  production: false,
+  stripePublicKey: 'pk_test_51RFDmzPDNG2XzTXTipaO0cZTWdiWwggNp6gInXo5YaJyVAuqSuSRpCEil76LE7lJcJnLy5zx3Ui3TfhNelkBZAgO007mKeni5R' // Reemplaza con tu clave pública de Stripe
+};
 
 @Component({
   selector: 'app-cart-preview',
@@ -39,7 +45,7 @@ import { ButtonModule } from "primeng/button";
 
         <div class="cart-actions">
           <strong>Total: {{ total() | currency:'COP' }}</strong>
-          <button>Pagar</button>
+          <button (click)="pagar()">Pagar</button>
           <button (click)="clear()">Vaciar carrito</button>
         </div>
       </div>
@@ -180,10 +186,17 @@ export class CartPreviewComponent implements OnInit{
   private productServ = inject(ProductsService);
   private toastr = inject(ToastrService)
   private authService = inject(AuthService)
+  private stripePromise: Promise<Stripe | null> = loadStripe(environment.stripePublicKey);
+
+
   cartItems = this.cartService.getItems();
   open = signal(false);
   token = signal<string | null>(null);
+  loading = signal(false);
+  showCheckout = signal(false);
   previousLength = 0;
+
+  
 
   constructor() {
     effect(() => {
@@ -253,7 +266,58 @@ export class CartPreviewComponent implements OnInit{
   ngOnInit(): void {
     this.getToken()
   }
-
   
+
+  async pagar() {
+    if (!this.token()) {
+      this.toastr.error('Debes iniciar sesión para realizar el pago');
+      return;
+    }
+
+    this.loading.set(true);
+    this.showCheckout.set(true);
+
+    try {
+      // Preparar los datos para create_payment
+      const orderItems = this.cartItems().map(item => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        price: item.price,
+        selectedSize: item.selectedSize
+      }));
+
+      const user = { id: this.authService.getToken() }; // Asegúrate de que AuthService tenga getUserId()
+
+      // Llamar al endpoint create_payment usando createPaymentOrder
+      const response = await this.productServ.createPaymentOrder({
+        user,
+        orderItems,
+        paymentMethod: 'card',
+        totalAmount: this.total()
+      }).toPromise();
+
+      const { clientSecret } = response;
+
+      // Cargar Stripe.js
+      const stripe = await this.stripePromise;
+      if (!stripe) {
+        throw new Error('No se pudo cargar Stripe.js');
+      }
+
+      // Renderizar el formulario de pago embebido
+      const checkout = await stripe.initEmbeddedCheckout({
+        clientSecret
+      });
+
+      // Montar el formulario en el contenedor
+      checkout.mount('#checkout-container');
+      this.loading.set(false);
+    } catch (error) {
+      this.loading.set(false);
+      this.showCheckout.set(false);
+      this.toastr.error('Error al iniciar el pago');
+      console.error('Error initiating payment:', error);
+    }
+  }
 }
 

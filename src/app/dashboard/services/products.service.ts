@@ -34,16 +34,13 @@ getProductById(id: string): Observable<Product[]> {
 
 /***************************************************PAYMENTS***************************************************/
 
-createPaymentOrder( payload: any) {
-  return this.http.post<{ checkoutUrl: string }>(`${this.API_URL}/create_payment`, payload);
+createPaymentOrder(payload: any): Observable<any> {
+  return this.http.post(`${this.API_URL}/create_payment`, payload);
 }
 
-verifyPayment(refPayco: string): Observable<any> {
-  return this.http.get(`${this.API_URL}/verify`, {
-    params: { ref_payco: refPayco }
-  });
+verifyStripePayment(sessionId: string): Observable<any> {
+  return this.http.get(`${this.API_URL}/verify-payment/${sessionId}`);
 }
-
 /*******************************************************CITIES*************************************************/
 
 getCities(): Observable<any[]> {
