@@ -58,7 +58,7 @@ export class PaymentResponseComponent implements OnInit {
               // Redirigir a la página de éxito después de un breve retraso
               setTimeout(() => {
                 this.router.navigate(['/success']);
-              }, 2000);
+              }, 8000);
               break;
             case 'pending':
               this.paymentStatus = 'Pago pendiente';
