@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { CartService } from '@app/dashboard/services/cart.service';
 import { ProductsService } from '@app/dashboard/services/products.service';
 import { AuthService } from '@app/auth/services/auth.service';
+import { Router } from '@angular/router';
 
 export const environment = {
   production: false,
@@ -103,6 +104,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private cartService = inject(CartService);
   private productServ = inject(ProductsService);
   private toastr = inject(ToastrService);
+  private router = inject(Router)
   private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   cartItems = this.cartService.getItems();
@@ -209,6 +211,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   goBack() {
-    window.history.back(); // O usa Router para redirigir a una ruta específica
+    this.router.navigate(['/dashboard'])
   }
 }
