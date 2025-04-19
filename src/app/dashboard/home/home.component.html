@@ -1,5 +1,8 @@
 <section class="container">
-
+  <div class="title">
+    <p>Nuestros Productos</p>
+  </div>
+  
   <div style="margin-top: 20px">
     <p-carousel [value]="filteredProducts" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
       <ng-template let-product #item>
@@ -21,6 +24,40 @@
       </ng-template>
   </p-carousel>
   </div>
+
+  <div class="title" id="offers">
+    <p>Nuestras Ofertas</p>
+  </div>
+@if(offers.length > 0){
+  <div style="margin-top: 20px">
+    <p-carousel [value]="filteredOffers" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
+      <ng-template let-product #item>
+          <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
+              <div class="mb-4">
+                  <div class="relative mx-auto">
+                      <img [src]="product.image" [alt]="product.name" class="product-image"/>
+                  </div>
+              </div>
+              <div style="font-weight: bold;" class="mb-4 font-bold">{{ product.name }}</div>
+              <div class="flex justify-between items-center">
+                  <div class="prices">
+                    <p class="text-tach">{{ '$' + product.original_price}}</p>
+                    <p class="text-offer">{{ '$' + product.price }}</p>
+                  </div>
+                  <span>
+                      <p-button icon="pi pi pi-eye" styleClass="ml-2" [routerLink]="[`/products/${product.brand}/${product.gender}/${product._id}`]" routerLinkActive="router-link-active" />
+                  </span>
+              </div>
+          </div>
+      </ng-template>
+  </p-carousel>
+  </div>
+}@else {
+  <div style="margin-top: 20px; width: 100%; display: flex; justify-content: center;">
+    <p style="font-size: 1.5rem; color: red; font-weight: bold;">Por el momento no hay productos en oferta!</p>
+  </div>
+}
+  
 
 <!--<div class="contenedor">
   @for(product of filteredProducts; track product.reference_id) {

@@ -32,6 +32,10 @@ getProductById(id: string): Observable<Product[]> {
   return this.http.get<Product[]>(`${this.API_URL}/get_product/${id}`);
 }
 
+getOffers(){
+  return this.http.get(`${this.API_URL}/get-offers`)
+}
+
 /***************************************************PAYMENTS***************************************************/
 
 createPaymentOrder(payload: any): Observable<any> {
