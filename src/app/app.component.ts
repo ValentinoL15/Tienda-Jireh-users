@@ -1,14 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from "./static-components/header/header.component";
 import { ButtonModule } from 'primeng/button';
 import { MyComponent } from "./spinner.component";
 import { AuthService } from './auth/services/auth.service';
 import { CartPreviewComponent } from "./cart-preview.component";
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Menubar } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { RouterLink } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ import { RouterLink } from '@angular/router';
 export class AppComponent implements OnInit {
   private router = inject(Router)
   private authService = inject(AuthService)
+  private viewportScroller = inject(ViewportScroller)
   token: any = null
 
  items: MenuItem[] = [
@@ -107,7 +109,8 @@ export class AppComponent implements OnInit {
     {
       label: 'Ofertas',
       icon: 'pi pi-percentage',
-      routerLink: '/popular',
+      routerLink: '/dashboard',
+      fragment: 'offers',
     },
     {
       label: 'Contacto',
@@ -117,132 +120,18 @@ export class AppComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      // Esperar un breve momento para asegurar que el contenido se haya renderizado
+      setTimeout(() => {
+        const fragment = this.router.parseUrl(this.router.url).fragment;
+        if (fragment) {
+          this.viewportScroller.scrollToAnchor(fragment);
+        }
+      }, 100); // Puedes ajustar el tiempo según sea necesario
+    });
+  }
   }
 
-  /* this.items = [
-     {
-         label: 'Hombre',
-         icon: 'pi pi-box',
-         items: [
-             [
-                 {
-                     label: 'Adidas',
-                     items: [
-                         { label: 'SuperStar', route: '/register'},
-                         { label: 'Street' },
-                         { label: 'Tenis' },
-                         { label: 'Adizero' },
-                     ],
-                 },
-             ],
-             [
-               {
-                 label: "Nike",
-                 items: [
-                   { label: 'Air Force' },
-                   { label: 'Street' },
-                   { label: 'Outdoor' },
-                   { label: 'Predator' },
-                 ]
-               }
-             ],
-             [
-               {
-                 label: "Nike",
-                 items: [
-                   { label: 'Air Force' },
-                   { label: 'Street' },
-                   { label: 'Outdoor' },
-                   { label: 'Predator' },
-                 ]
-               }
-             ]
-         ],
-     },
-     {
-         label: 'Mujer',
-         icon: 'pi pi-mobile',
-         items: [
-             [
-                 {
-                     label: 'Computer',
-                     items: [
-                         { label: 'Monitor' },
-                         { label: 'Mouse' },
-                         { label: 'Notebook' },
-                         { label: 'Keyboard' },
-                         { label: 'Printer' },
-                         { label: 'Storage' },
-                     ],
-                 },
-             ],
-             [
-                 {
-                     label: 'Home Theater',
-                     items: [{ label: 'Projector' }, { label: 'Speakers' }, { label: 'TVs' }],
-                 },
-             ],
-             [
-                 {
-                     label: 'Gaming',
-                     items: [{ label: 'Accessories' }, { label: 'Console' }, { label: 'PC' }, { label: 'Video Games' }],
-                 },
-             ],
-             [
-                 {
-                     label: 'Appliances',
-                     items: [
-                         { label: 'Coffee Machine' },
-                         { label: 'Fridge' },
-                         { label: 'Oven' },
-                         { label: 'Vaccum Cleaner' },
-                         { label: 'Washing Machine' },
-                     ],
-                 },
-             ],
-         ],
-     },
-     {
-         label: 'Niños',
-         icon: 'pi pi-clock',
-         items: [
-             [
-                 {
-                     label: 'Football',
-                     items: [{ label: 'Kits' }, { label: 'Shoes' }, { label: 'Shorts' }, { label: 'Training' }],
-                 },
-             ],
-             [
-                 {
-                     label: 'Running',
-                     items: [{ label: 'Accessories' }, { label: 'Shoes' }, { label: 'T-Shirts' }, { label: 'Shorts' }],
-                 },
-             ],
-             [
-                 {
-                     label: 'Swimming',
-                     items: [{ label: 'Kickboard' }, { label: 'Nose Clip' }, { label: 'Swimsuits' }, { label: 'Paddles' }],
-                 },
-             ],
-             [
-                 {
-                     label: 'Tennis',
-                     items: [{ label: 'Balls' }, { label: 'Rackets' }, { label: 'Shoes' }, { label: 'Training' }],
-                 },
-             ],
-         ],
-     },
- ];*/
 
-  /*formatBrandForUrl(brand: string): string {
-  return brand
-              .replace(/\s+/g, '')   
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "");
-}*/
-  /*getToken(){
-    this.token = this.authService.getToken()
-  }*/
-
-}

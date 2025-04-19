@@ -7,9 +7,6 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { Carousel } from 'primeng/carousel';
 
-
-
-
 @Component({
   selector: 'app-home',
   imports: [ButtonModule, PaginatorModule,RouterLink,Carousel],
@@ -25,9 +22,9 @@ export class HomeComponent implements OnInit{
   products: Product[] = []
   totalRecords: number = 0;
   skip: number = 0;
-  limit: number = 12;
+  limit: number = 6;
   first: number = 0;
-  
+  offers: Product[] = []
   responsiveOptions: any[] | undefined;
 
   ngOnInit(): void {
@@ -54,14 +51,12 @@ export class HomeComponent implements OnInit{
         numScroll: 1,
     },
 ];
-  
+  this.getOffers()
   }
 
   get filteredProducts() {
     return this.products.filter(p => p.shoes);
   }
-
-  
 
 getAllProducts(skip: number = 0, limit: number = this.limit) {
   this.productServ.getAllProducts(skip, limit).subscribe({
@@ -75,6 +70,23 @@ getAllProducts(skip: number = 0, limit: number = this.limit) {
       this.toastr.error(err.error.message)
     }
   });
+}
+
+get filteredOffers(){
+  return this.offers.filter(o => o.shoes)
+}
+
+getOffers(){
+  this.productServ.getOffers().subscribe({
+    next: (res : any) => {
+      this.offers = res.offers
+      console.log(this.offers)
+      this.cd.markForCheck(); // Forzar actualización del DOM
+    },
+    error: (err : any) => {
+      this.toastr.error("Error desconocido, por favor ingrese más tarde")
+    }
+  })
 }
 
 onPageChange(event: PaginatorState) {

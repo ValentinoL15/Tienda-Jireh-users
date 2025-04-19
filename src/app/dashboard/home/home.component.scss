@@ -18,6 +18,29 @@
   }
 }
 
+.title {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin: 10px 0;
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: underline double;
+}
+
+.prices {
+  display: flex;
+  gap: 20px;
+}
+
+.text-tach {
+  text-decoration:line-through;
+}
+
+.text-offer {
+  font-weight: bold;
+}
+
 .contenedor {
   display: flex;
   flex-wrap: wrap;
