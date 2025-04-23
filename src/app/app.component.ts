@@ -10,6 +10,8 @@ import { Menubar } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { RouterLink } from '@angular/router';
 import { filter } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { login } from './states/counter.actions';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +24,7 @@ export class AppComponent implements OnInit {
   private router = inject(Router)
   private authService = inject(AuthService)
   private viewportScroller = inject(ViewportScroller)
+  store = inject(Store)
   token: any = null
 
  items: MenuItem[] = [
@@ -131,7 +134,15 @@ export class AppComponent implements OnInit {
         }
       }, 100); // Puedes ajustar el tiempo según sea necesario
     });
+    if (typeof window !== 'undefined') {
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        this.store.dispatch(login({ user }));
+      }
+    }
   }
+
   }
 
 

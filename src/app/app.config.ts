@@ -10,6 +10,10 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './authentication.interceptor';
 import { SpinnerInterceptor } from './spinner.interceptor';
 import { provideToastr } from 'ngx-toastr';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { counterReducer } from './states/counter.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideExperimentalZonelessChangeDetection(),
@@ -35,5 +39,9 @@ export const appConfig: ApplicationConfig = {
             darkModeSelector: '.my-app-dark'
         }
       }
-  })]
+  }),
+  provideStore({ counterReducer }),
+  provideStoreDevtools(),
+  provideEffects(),]
+
 };

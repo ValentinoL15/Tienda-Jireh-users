@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService } from '@app/dashboard/services/cart.service';
+import { logout } from '@app/states/counter.actions';
+import { Store } from '@ngrx/store';
 import { catchError, Observable, Subject, tap, throwError } from 'rxjs';
 
 @Injectable({
@@ -18,6 +20,7 @@ export class AuthService {
   private http = inject(HttpClient)
   private router = inject(Router)
   private cartService = inject(CartService)
+  private store = inject(Store)
   private tokenChangedSubject = new Subject<string | null>();
   public tokenChanged$ = this.tokenChangedSubject.asObservable();
   
@@ -39,7 +42,8 @@ setToken(token: string): void {
 logIn(form: any) {
   return this.http.post(`${this.API_URL}/login`, form).pipe(
     tap((response: any) => {
-      console.log('Respuesta de login:', response);
+      const { password, ...user } = response.userExist;
+      localStorage.setItem('user', JSON.stringify(user));
       const token = response.token;
       if (token) {
         this.setToken(token);
@@ -60,6 +64,7 @@ logOut(): void {
     localStorage.removeItem(this.tokenKey);
     this.tokenChangedSubject.next(null);
     this.cartService.clearCart(); // limpia carrito
+    this.store.dispatch(logout()); // limpia el store
   }
   this.router.navigate(['/dashboard']);
 }

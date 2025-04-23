@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { Subscription } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { login } from '../../states/counter.actions';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +28,7 @@ export class HeaderComponent implements OnInit{
   private toastr = inject(ToastrService)
   private cd = inject(ChangeDetectorRef)
   private router = inject(Router)
+  store = inject(Store)
   private tokenSubscription: Subscription = Subscription.EMPTY;
 
   value3 : string = ''
@@ -104,6 +107,8 @@ export class HeaderComponent implements OnInit{
     }
     this.authService.logIn(formulario).subscribe({
       next: (res : any) => {
+        const { password, ...user } = res.userExist;
+        this.store.dispatch(login({user: user}));
         localStorage.setItem("st_1892@121", res.token);
         this.token = res.token;
         this.visible = false;
@@ -113,7 +118,6 @@ export class HeaderComponent implements OnInit{
       },
       error: (err : any) => {
         this.toastr.error(err.error.message, "Error de Autenticación")
-        
         console.log(err)
       }
     })
