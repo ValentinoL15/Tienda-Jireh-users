@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
       '/get_products',
       '/get_product/:id',
       '/get_products_by_gender/:brand/:gender',
-      '/get-offers'
+      '/get-offers',
     ];
   
     if (publicUrls.some(url => req.url.includes(url))) {
