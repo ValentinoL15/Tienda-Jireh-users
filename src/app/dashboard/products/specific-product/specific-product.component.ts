@@ -41,6 +41,7 @@ export class SpecificProductComponent implements OnInit {
   selectedShoeId: string | null = null;
   sizes: number[] = Array.from({ length: 15 }, (_, i) => 34 + i); // [34, 35, ..., 48]
   selectedSize: number | null = null;
+  displayedImage: string | null = null; // Imagen actualmente mostrada
 
   //INTERFACES
   product: Product = {
@@ -71,15 +72,35 @@ export class SpecificProductComponent implements OnInit {
       talle_43: 0,
       talle_44: 0,
       sales: 0,
-      image: "",
+      images: [""],
     }]
   }
 
   selectShoe(shoeId: any) {
     this.selectedShoeId = shoeId;
-    this.selectedSize = null; // Resetear talle seleccionado al cambiar de zapatilla
+    this.selectedSize = null; // Resetear talle seleccionado
+    const selectedShoe = this.product.shoes.find(shoe => shoe._id === shoeId);
+    this.displayedImage = selectedShoe?.images[0] || this.product.image; // Mostrar la primera imagen de la variación
     this.cd.markForCheck();
   }
+
+  selectImage(image: string) {
+    this.displayedImage = image; // Actualizar la imagen principal
+    this.cd.markForCheck();
+  }
+
+  getDisplayedImage(): string {
+    return this.displayedImage || this.product.image; // Fallback a la imagen del producto
+  }
+
+  getSelectedShoeImages(): string[] {
+    if (!this.selectedShoeId) {
+      return [];
+    }
+    const selectedShoe = this.product.shoes.find(shoe => shoe._id === this.selectedShoeId);
+    return selectedShoe?.images || [];
+  }
+
 
   selectSize(size: number) {
     if (this.isSizeAvailable(size)) {
@@ -115,15 +136,15 @@ export class SpecificProductComponent implements OnInit {
     return shoe[talleKey] !== undefined && shoe[talleKey] > 0;
   }
 
-  getDisplayedImage(): string {
+  /*getDisplayedImage(): string {
     if (!this.selectedShoeId) {
       return this.product.image; // Mostrar imagen general si no hay zapatilla seleccionada
     }
     const selectedShoe = this.product.shoes.find(
       (shoe: SpecificShoe) => shoe._id === this.selectedShoeId
     );
-    return selectedShoe?.image || this.product.image; // Fallback a imagen general
-  }
+    return selectedShoe?.images || this.product.image; // Fallback a imagen general
+  }*/
 
   volver() {
     this.router.navigate([`/products/${this.brand}/${this.gender}`])
@@ -165,12 +186,13 @@ export class SpecificProductComponent implements OnInit {
       next: (res: any) => {
         console.log('✅ Producto recibido:', res);
         this.product = res.product;
+        this.displayedImage = this.product.image; // Mostrar imagen del producto inicialmente
         this.cd.markForCheck();
       },
       error: (err: any) => {
-        console.log(err)
+        console.log(err);
       }
-    })
+    });
   }
 
   /****************************************************CARRITO*************************************/

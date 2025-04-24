@@ -37,7 +37,7 @@ export interface SpecificShoe {
   talle_43: number,
   talle_44: number,
   sales: number,
-  image: string,
+  images: [string],
 }
 
 export interface User {

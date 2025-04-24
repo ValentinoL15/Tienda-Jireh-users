@@ -1,95 +1,92 @@
 .button {
-  margin-top:10px
+  margin-top: 10px;
 }
 
 .product-container {
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
 .product {
   display: flex;
-  gap: 2rem;
   max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
 }
 
-/* Left column - Main image */
 .product-left {
   flex: 1;
-  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.image {
+.image-container {
+  display: flex;
+  gap: 10px;
   width: 100%;
 }
 
-.image img {
-  width: 100%;
-  height: auto;
+.thumbnails {
+  display: flex;
+  flex-direction: column; /* Miniaturas en columna vertical */
+  gap: 10px;
+  width: 70px; /* Ancho fijo para las miniaturas */
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
   object-fit: cover;
-  aspect-ratio: 1 / 1;
-  border-radius: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border 0.3s ease;
 }
 
-/* Right column - Product info */
+.thumbnail.selected,
+.thumbnail:hover {
+  border: 2px solid #007bff;
+}
+
+.main-image-container {
+  flex: 1; /* Ocupa el espacio restante */
+}
+
+.main-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 .product-right {
   flex: 1;
-  max-width: 50%;
+  padding: 20px;
 }
 
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 10px;
 }
 
-/* Typography */
-.filters p {
-  margin: 0;
-}
-
-.type {
-  font-size: 1rem;
-  color: #666;
-}
-
-.name {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.price {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-/* Variations section */
 .colors {
   display: flex;
-  flex-direction: row;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .color-option {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 0.25rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: border-color 0.2s, transform 0.2s;
-  object-fit: cover;
-}
-
-.color-option:hover {
-  transform: scale(1.05);
 }
 
 .color-option.selected {
-  border-color: #000;
+  border: 2px solid #007bff;
 }
 
-/* Sizes section */
 .talles {
   display: flex;
   flex-wrap: wrap;
@@ -139,7 +136,22 @@
     width: 100%;
   }
 
-  .image img {
+  .image-container {
+    flex-direction: column; /* En móviles, miniaturas debajo de la imagen */
+    align-items: center;
+  }
+
+  .thumbnails {
+    flex-direction: row; /* Miniaturas en fila en móviles */
+    width: 100%;
+    justify-content: center;
+  }
+
+  .main-image-container {
+    width: 100%;
+  }
+
+  .main-image {
     aspect-ratio: 4 / 3;
   }
 
@@ -185,6 +197,15 @@
     width: 32px;
     height: 32px;
     font-size: 0.8rem;
+  }
+
+  .thumbnails {
+    gap: 5px;
+  }
+
+  .thumbnail {
+    width: 50px;
+    height: 50px;
   }
 }
 /*.mini-cart {

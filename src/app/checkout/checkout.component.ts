@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal, inject, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
-
 import { ToastrService } from 'ngx-toastr';
 import { loadStripe, Stripe, StripeEmbeddedCheckout } from '@stripe/stripe-js';
 import { firstValueFrom } from 'rxjs';
@@ -26,7 +25,7 @@ export const environment = {
         <div class="cart-summary">
           <h3>Resumen del Carrito</h3>
           <div *ngFor="let item of cartItems()" class="cart-item">
-            <img [src]="item.product.image" alt="{{ item.parentProduct?.name }}" />
+            <img [src]="item.product.images[0]" alt="{{ item.parentProduct?.name }}" />
             <div>
               <strong>{{ item.parentProduct?.name || 'Producto' }}</strong>
               <p>Talla: {{ item.selectedSize }}</p>
@@ -157,13 +156,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         product: item.product._id,
         quantity: item.quantity,
         price: item.price,
-        selectedSize: item.selectedSize
+        selectedSize: `talle_${item.selectedSize}` // Enviar como "talle_38"
       }));
 
       const user = { id: this.authService.getToken() };
 
       const response = await firstValueFrom(
-        this.productServ.createPaymentOrder({
+        this.productServ.createCheckoutSession({
           user,
           orderItems,
           paymentMethod: 'card',

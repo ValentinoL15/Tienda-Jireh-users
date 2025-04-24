@@ -30,7 +30,7 @@ export const environment = {
       <p-button severity="contrast" size="small" [rounded]="true" class="closes-btn" (click)="toggle()">X</p-button>
       <div *ngIf="cartItems().length; else emptyCart">
         <div *ngFor="let item of cartItems(); let i = index" class="cart-item">
-          <img [src]="item.product.image" />
+          <img [src]="item.product.images[0]" />
           <div>
             <strong>{{ item.parentProduct?.name || 'Producto' }}</strong>
             <p>Talla: {{ item.selectedSize }}</p>
