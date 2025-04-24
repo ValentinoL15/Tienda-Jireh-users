@@ -52,7 +52,7 @@ export class MyOrdersComponent implements OnInit{
   talle_43: 0,
   talle_44: 0,
             sales: 0,
-            image: "",
+            images: [""],
           },
           quantity: 0,
           price: 0,

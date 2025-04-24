@@ -1,14 +1,30 @@
-
-
 <div class="button">
-  <p-button (onClick)="volver()" severity="contrast" icon="pi pi-arrow-left" label="Volver" ></p-button>
+  <p-button (onClick)="volver()" severity="contrast" icon="pi pi-arrow-left" label="Volver"></p-button>
 </div>
 
 <div class="product-container">
   <div class="product">
     <div class="product-left">
-      <div class="image">
-        <img [src]="getDisplayedImage()" alt="{{product.name}}" />
+      <!-- Contenedor para miniaturas y imagen principal -->
+      <div class="image-container">
+        <!-- Miniaturas a la izquierda -->
+        <div class="thumbnails">
+          @if (selectedShoeId) {
+            @for (image of getSelectedShoeImages(); track image) {
+              <img
+                [src]="image"
+                alt="Variación de zapatilla"
+                class="thumbnail"
+                [class.selected]="image === displayedImage"
+                (click)="selectImage(image)"
+              />
+            }
+          }
+        </div>
+        <!-- Imagen principal -->
+        <div class="main-image-container">
+          <img [src]="getDisplayedImage()" alt="{{product.name}}" class="main-image" />
+        </div>
       </div>
     </div>
     <div class="product-right">
@@ -20,7 +36,7 @@
         <div class="colors">
           @for (shoe of product.shoes; track shoe._id) {
             <img
-              [src]="shoe.image"
+              [src]="shoe.images[0] || product.image"
               alt="Variación de zapatilla"
               class="color-option"
               [class.selected]="selectedShoeId === shoe._id"
@@ -58,33 +74,27 @@
   </div>
 </div>
 
-   <div class="mini-cart" *ngIf="productoSeleccionado" [class.open]="carritoAbierto">
-    <div class="mini-cart-header">
-      <h3>🛒 Tu compra</h3>
-      <button class="close-btn" (click)="cerrarCarrito()">&times;</button>
-    </div>
-  
-    <div class="mini-cart-body">
-      <img [src]="productoSeleccionado.image" class="mini-cart-img" alt="Producto" />
-      <p class="producto-nombre">{{ product.name.toUpperCase() }}</p>
-      <p class="producto-detalle">Talle: <strong>{{ productoSeleccionado.size }}</strong> | Color: <strong>{{ productoSeleccionado.color }}</strong></p>
-      <p class="precio-unitario">Precio unitario: <strong>{{ product.price | currency:"USD" }}</strong></p>
-  
-      <div class="cantidad-container">
-        <label for="cantidad">Cantidad:</label>
-        <input 
-          type="number" 
-          min="1" 
-          max="2" 
-          [(ngModel)]="cantidad" 
-          class="cantidad-input"
-        />
-      </div>
-  
-      <p class="total">Total: <strong>{{ product.price * cantidad | currency:"USD" }}</strong></p>
-  
-      <button class="pagar-btn">Pagar</button>
-    </div>
+<div class="mini-cart" *ngIf="productoSeleccionado" [class.open]="carritoAbierto">
+  <div class="mini-cart-header">
+    <h3>🛒 Tu compra</h3>
+    <button class="close-btn" (click)="cerrarCarrito()">×</button>
   </div>
- 
-
+  <div class="mini-cart-body">
+    <img [src]="productoSeleccionado.image" class="mini-cart-img" alt="Producto" />
+    <p class="producto-nombre">{{ product.name.toUpperCase() }}</p>
+    <p class="producto-detalle">Talle: <strong>{{ productoSeleccionado.size }}</strong> | Color: <strong>{{ productoSeleccionado.color }}</strong></p>
+    <p class="precio-unitario">Precio unitario: <strong>{{ product.price | currency:'USD' }}</strong></p>
+    <div class="cantidad-container">
+      <label for="cantidad">Cantidad:</label>
+      <input
+        type="number"
+        min="1"
+        max="2"
+        [(ngModel)]="cantidad"
+        class="cantidad-input"
+      />
+    </div>
+    <p class="total">Total: <strong>{{ product.price * cantidad | currency:'USD' }}</strong></p>
+    <button class="pagar-btn">Pagar</button>
+  </div>
+</div>
