@@ -51,7 +51,6 @@ export const environment = {
   severity="success"
   [loading]="loading()"
   (click)="pagar()"
-  (touchend)="pagar()"
   [disabled]="loading() || cartItems().length === 0"
 ></p-button>
           <p-button label="Vaciar carrito" severity="danger" (click)="clear()"></p-button>
