@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 
   export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-    const publicUrls = [
+    /*const publicUrls = [
       '/get_products',
       '/get_product/:id',
       '/get_products_by_gender/:brand/:gender',
@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
   
     if (publicUrls.some(url => req.url.includes(url))) {
       return next(req);
-    }
+    }*/
 
     const spinnerService = inject(SpinnerService)
     const token = localStorage.getItem("st_1892@121");
