@@ -270,7 +270,7 @@ export class CartPreviewComponent implements OnInit {
 
   pagar() {
     if (!this.token()) {
-      this.toastr.error('Debes iniciar sesión para realizar el pago');
+      this.toastr.error('Debes iniciar sesión para realizar el pagos');
       return;
     }
 
