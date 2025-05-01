@@ -27,10 +27,7 @@ export class AuthService {
 /***********************************************LOGIN****************************************************/ 
 
 getToken(): string | null {
-  if (isPlatformBrowser(this.platformId)) {
     return localStorage.getItem(this.tokenKey);
-  }
-  return null;
 }
 
 setToken(token: string): void {
